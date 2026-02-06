@@ -1,4 +1,5 @@
 import type { ModuleMetadata, Type } from "@nestjs/common";
+import type { Logger } from "@aws-sdk/types";
 
 export enum AwsxServiceKey {
   S3 = "s3",
@@ -32,6 +33,8 @@ export type AwsxServiceConfig = {
 export type AwsxDefaults = {
   region?: string;
   maxAttempts?: number;
+  enableLogger?: boolean;
+  logger?: Logger;
 };
 
 export type AwsxConfig = {

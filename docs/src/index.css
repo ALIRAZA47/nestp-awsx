@@ -234,6 +234,11 @@ a:hover {
   max-width: 640px;
 }
 
+.page-header {
+  display: grid;
+  gap: 8px;
+}
+
 .eyebrow {
   text-transform: uppercase;
   letter-spacing: 0.25em;
@@ -290,6 +295,10 @@ h1 {
 
 .card .code-block {
   width: 100%;
+}
+
+.card p {
+  margin-bottom: 0;
 }
 
 .card p {

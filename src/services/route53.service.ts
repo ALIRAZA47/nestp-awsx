@@ -28,4 +28,52 @@ export class Route53Service {
   ): Promise<ListHostedZonesCommandOutput> {
     return this.client.send(new ListHostedZonesCommand(params));
   }
+
+  async upsertARecord(params: {
+    zoneId: string;
+    name: string;
+    values: string[];
+    ttl?: number;
+  }): Promise<ChangeResourceRecordSetsCommandOutput> {
+    return this.changeRecordSets({
+      HostedZoneId: params.zoneId,
+      ChangeBatch: {
+        Changes: [
+          {
+            Action: "UPSERT",
+            ResourceRecordSet: {
+              Name: params.name,
+              Type: "A",
+              TTL: params.ttl ?? 60,
+              ResourceRecords: params.values.map((value) => ({ Value: value })),
+            },
+          },
+        ],
+      },
+    });
+  }
+
+  async upsertTxtRecord(params: {
+    zoneId: string;
+    name: string;
+    values: string[];
+    ttl?: number;
+  }): Promise<ChangeResourceRecordSetsCommandOutput> {
+    return this.changeRecordSets({
+      HostedZoneId: params.zoneId,
+      ChangeBatch: {
+        Changes: [
+          {
+            Action: "UPSERT",
+            ResourceRecordSet: {
+              Name: params.name,
+              Type: "TXT",
+              TTL: params.ttl ?? 300,
+              ResourceRecords: params.values.map((value) => ({ Value: value })),
+            },
+          },
+        ],
+      },
+    });
+  }
 }

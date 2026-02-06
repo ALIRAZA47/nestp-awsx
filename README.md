@@ -61,6 +61,19 @@ export class AppModule {}
 }
 ```
 
+### Client logger
+
+```ts
+import { AwsxConsoleLogger } from "@nestp/awsx";
+
+AwsxModule.forRoot({
+  defaults: {
+    enableLogger: true,
+    logger: new AwsxConsoleLogger(),
+  },
+});
+```
+
 ### Credential sources
 
 - `default`: AWS default chain (env vars, shared config/credentials files, ECS/EC2 metadata).

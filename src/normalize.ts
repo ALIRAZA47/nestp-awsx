@@ -7,6 +7,7 @@ import {
   AwsxServiceConfigNormalized,
   AwsxServiceKey,
 } from "./types";
+import { AwsxConsoleLogger } from "./logger";
 
 const mergeCredentialConfigs = (
   base: AwsxCredentialConfig | undefined,
@@ -30,6 +31,9 @@ const normalizeServiceConfig = (
   const clientDefaults: Record<string, unknown> = {};
   if (defaults.maxAttempts) {
     clientDefaults.maxAttempts = defaults.maxAttempts;
+  }
+  if (defaults.enableLogger) {
+    clientDefaults.logger = defaults.logger ?? new AwsxConsoleLogger();
   }
 
   return {

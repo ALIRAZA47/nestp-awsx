@@ -25,6 +25,23 @@ const Config = () => (
     </section>
 
     <section className="section">
+      <div className="two-col">
+        <div className="card">
+          <h3>Client Logger</h3>
+          <CodeBlock>{codeSamples.loggerConfig}</CodeBlock>
+        </div>
+        <div className="card">
+          <h3>What It Does</h3>
+          <p>
+            Set <strong>enableLogger</strong> to inject a logger into AWS SDK
+            clients that support logging. Pass a custom logger or use the
+            built-in <code>AwsxConsoleLogger</code>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section className="section">
       <div className="card">
         <h3>Defaults & Overrides</h3>
         <p>
