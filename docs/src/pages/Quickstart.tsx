@@ -12,7 +12,7 @@ const Quickstart = () => (
     </header>
 
     <section className="section">
-      <div className="two-col">
+      <div className="card-stack">
         <div className="card">
           <h3>Module Setup</h3>
           <CodeBlock>{codeSamples.quickStart}</CodeBlock>

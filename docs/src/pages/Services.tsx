@@ -19,7 +19,7 @@ const Services = () => (
     </section>
 
     <section className="section">
-      <div className="card-grid">
+      <div className="card-stack">
         <div className="card">
           <h3>S3</h3>
           <CodeBlock>{codeSamples.s3}</CodeBlock>
@@ -48,7 +48,7 @@ const Services = () => (
           need full control.
         </p>
       </div>
-      <div className="card-grid">
+      <div className="card-stack">
         <div className="card">
           <h3>S3 Helpers</h3>
           <CodeBlock>{codeSamples.s3Helpers}</CodeBlock>
@@ -73,7 +73,7 @@ const Services = () => (
         <h2>S3 Power Moves</h2>
         <p>Signed URLs and bulk uploads for everyday workflows.</p>
       </div>
-      <div className="two-col">
+      <div className="card-stack">
         <div className="card">
           <h3>Signed URLs</h3>
           <CodeBlock>{codeSamples.s3SignedUrl}</CodeBlock>
@@ -93,7 +93,7 @@ const Services = () => (
     </section>
 
     <section className="section">
-      <div className="two-col">
+      <div className="card-stack">
         <div className="card">
           <h3>Inject a Raw Client</h3>
           <CodeBlock>{codeSamples.injectClient}</CodeBlock>

@@ -28,7 +28,7 @@ const Overview = () => (
         <h2>What You Get</h2>
         <p>Opinionated defaults with enough flexibility to fit real projects.</p>
       </div>
-      <div className="card-grid">
+      <div className="card-stack">
         <article className="card">
           <h3>Single Client per Service</h3>
           <p>

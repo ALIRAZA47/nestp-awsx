@@ -11,7 +11,7 @@ const Examples = () => (
     </header>
 
     <section className="section">
-      <div className="two-col">
+      <div className="card-stack">
         <div className="card">
           <h3>Basic Config</h3>
           <CodeBlock>{codeSamples.exampleConfig}</CodeBlock>

@@ -46,13 +46,20 @@ const Layout = () => {
       <Sidebar onNavigate={() => (isMobile ? setSidebarOpen(false) : null)} />
       <div className="content">
         <header className="topbar">
-          <button
-            className="sidebar-toggle"
-            onClick={() => setSidebarOpen((current) => !current)}
-            type="button"
-          >
-            {sidebarOpen ? "Hide" : "Menu"}
-          </button>
+          <div className="topbar-left">
+            <button
+              className="sidebar-toggle"
+              onClick={() => setSidebarOpen((current) => !current)}
+              type="button"
+            >
+              {sidebarOpen ? "Hide" : "Menu"}
+            </button>
+            <div className="topbar-links">
+              <a href="https://github.com/ALIRAZA47/nestp-awsx" target="_blank" rel="noreferrer">
+                GitHub
+              </a>
+            </div>
+          </div>
           <div className="topbar-actions">
             <button
               className="theme-toggle"

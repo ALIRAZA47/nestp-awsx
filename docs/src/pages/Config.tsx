@@ -12,7 +12,7 @@ const Config = () => (
     </header>
 
     <section className="section">
-      <div className="two-col">
+      <div className="card-stack">
         <div className="card">
           <h3>JSON Config</h3>
           <CodeBlock>{codeSamples.configJson}</CodeBlock>
@@ -25,7 +25,7 @@ const Config = () => (
     </section>
 
     <section className="section">
-      <div className="two-col">
+      <div className="card-stack">
         <div className="card">
           <h3>Client Logger</h3>
           <CodeBlock>{codeSamples.loggerConfig}</CodeBlock>
