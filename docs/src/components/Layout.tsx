@@ -11,17 +11,14 @@ const readStoredTheme = (): ThemeMode => {
   if (stored === "light" || stored === "dark") {
     return stored;
   }
-  return DEFAULT_THEME;
+  const prefersDark = window.matchMedia?.("(prefers-color-scheme: dark)").matches;
+  return prefersDark ? "dark" : DEFAULT_THEME;
 };
 
 const Layout = () => {
-  const [theme, setTheme] = useState<ThemeMode>(DEFAULT_THEME);
+  const [theme, setTheme] = useState<ThemeMode>(() => readStoredTheme());
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    setTheme(readStoredTheme());
-  }, []);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;

@@ -5,7 +5,10 @@ const Services = () => (
   <div className="page">
     <header className="page-header">
       <h1>Services</h1>
-      <p>Use the aggregated AwsxService or inject individual services.</p>
+      <p>
+        Use the aggregated AwsxService for quick access, or inject a specific
+        service/client when you want tighter dependencies.
+      </p>
     </header>
 
     <section className="section">

@@ -150,4 +150,5 @@ npx @nestp/awsx install`,
   "global": { "source": "default" },
   "services": { "s3": {} }
 }`,
+  exampleFiles: `examples/\n  basic/\n    package.json\n    tsconfig.json\n    src/\n      app.module.ts\n      app.service.ts\n      app.controller.ts\n      main.ts\n  async-config/\n    package.json\n    tsconfig.json\n    src/\n      app.module.ts\n      app.service.ts\n      app.controller.ts\n      main.ts`,
 };

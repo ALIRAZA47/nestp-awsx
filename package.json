@@ -2,19 +2,56 @@
   "name": "@nestp/awsx",
   "version": "0.1.0",
   "description": "One-stop AWS integrations for NestJS with unified config and CLI",
+  "license": "MIT",
+  "author": "ALIRAZA47",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ALIRAZA47/nestp-awsx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ALIRAZA47/nestp-awsx/issues"
+  },
+  "homepage": "https://github.com/ALIRAZA47/nestp-awsx#readme",
   "type": "commonjs",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js"
+    },
+    "./cli": {
+      "require": "./dist/cli/index.js"
+    }
+  },
   "bin": {
     "awsx": "dist/cli/index.js"
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "build": "tsdown",
-    "dev": "tsdown --watch"
+    "dev": "tsdown --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "nestjs",
+    "aws",
+    "s3",
+    "sqs",
+    "ses",
+    "route53",
+    "sdk",
+    "cloud"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "dependencies": {
     "@aws-sdk/client-route-53": "^3.552.0",

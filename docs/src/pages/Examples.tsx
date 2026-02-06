@@ -5,7 +5,9 @@ const Examples = () => (
   <div className="page">
     <header className="page-header">
       <h1>Examples</h1>
-      <p>Reference configuration and usage patterns from the repo.</p>
+      <p>
+        Reference configuration and usage patterns taken directly from the repo.
+      </p>
     </header>
 
     <section className="section">
@@ -23,10 +25,17 @@ const Examples = () => (
 
     <section className="section">
       <div className="card">
-        <h3>Repo Example</h3>
+        <h3>Example File Map</h3>
+        <CodeBlock>{codeSamples.exampleFiles}</CodeBlock>
+      </div>
+    </section>
+
+    <section className="section">
+      <div className="card">
+        <h3>Repo Examples</h3>
         <p>
-          See <code>examples/basic</code> for a minimal setup you can copy into your
-          project.
+          See <code>examples/basic</code> for the default-chain setup and
+          <code>examples/async-config</code> for environment-driven configuration.
         </p>
       </div>
     </section>

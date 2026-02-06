@@ -5,7 +5,10 @@ const Quickstart = () => (
   <div className="page">
     <header className="page-header">
       <h1>Quick Start</h1>
-      <p>Get AWSX running in your NestJS application in a few minutes.</p>
+      <p>
+        Start with `forRoot` for static config or `forRootAsync` when you need
+        environment-aware values.
+      </p>
     </header>
 
     <section className="section">

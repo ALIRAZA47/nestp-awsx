@@ -5,7 +5,10 @@ const Cli = () => (
   <div className="page">
     <header className="page-header">
       <h1>CLI</h1>
-      <p>Interactive commands to install and scaffold configuration.</p>
+      <p>
+        Interactive commands to install the package and scaffold a clean
+        configuration file.
+      </p>
     </header>
 
     <section className="section">

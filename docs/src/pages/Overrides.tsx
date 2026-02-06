@@ -5,7 +5,10 @@ const Overrides = () => (
   <div className="page">
     <header className="page-header">
       <h1>Overrides & Tokens</h1>
-      <p>Customize AWSX services without forking the package.</p>
+      <p>
+        Customize AWSX services without forking the package by replacing providers
+        with your own classes.
+      </p>
     </header>
 
     <section className="section">

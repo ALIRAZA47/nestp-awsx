@@ -8,9 +8,10 @@ const Overview = () => (
         <p className="eyebrow">NestJS + AWS SDK v3</p>
         <h1>All AWS essentials, one NestJS module.</h1>
         <p className="lead">
-          AWSX wires S3, SQS, SES, and Route53 into a single module with unified
-          configuration, credential handling, and clean service APIs. One client
-          per service keeps things predictable and light.
+          AWSX pulls S3, SQS, SES, and Route53 into a single module with a shared
+          configuration model, explicit credential sources, and clear service APIs.
+          One client per service keeps your dependency graph lean and avoids
+          ambiguous credential selection.
         </p>
       </div>
       <div className="hero-card">
@@ -25,7 +26,7 @@ const Overview = () => (
     <section className="section">
       <div className="section-title">
         <h2>What You Get</h2>
-        <p>Opinionated defaults with enough flexibility to grow.</p>
+        <p>Opinionated defaults with enough flexibility to fit real projects.</p>
       </div>
       <div className="card-grid">
         <article className="card">
@@ -55,6 +56,23 @@ const Overview = () => (
             behavior.
           </p>
         </article>
+      </div>
+    </section>
+
+    <section className="section">
+      <div className="card">
+        <h3>Repository</h3>
+        <p>
+          Source, issues, and releases live in the GitHub repo:
+          <a
+            className="inline-link"
+            href="https://github.com/ALIRAZA47/nestp-awsx"
+            target="_blank"
+            rel="noreferrer"
+          >
+            github.com/ALIRAZA47/nestp-awsx
+          </a>
+        </p>
       </div>
     </section>
   </div>

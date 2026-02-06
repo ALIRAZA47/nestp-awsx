@@ -5,7 +5,10 @@ const Credentials = () => (
   <div className="page">
     <header className="page-header">
       <h1>Credentials</h1>
-      <p>Choose the credential strategy that fits your environment.</p>
+      <p>
+        Choose the credential strategy that fits your environment, from the AWS
+        default chain to profiles or explicit static keys.
+      </p>
     </header>
 
     <section className="section">
@@ -28,7 +31,8 @@ const Credentials = () => (
           The <strong>default</strong> source uses the AWS SDK credential chain
           (env vars, shared config/credentials files, ECS/EC2 metadata, etc.).
           Use <strong>profile</strong> to read a named profile. Use
-          <strong>static</strong> when you want to pass keys explicitly.
+          <strong>static</strong> when you want to pass keys explicitly or when
+          you are loading them from a secrets manager at runtime.
         </p>
       </div>
     </section>
