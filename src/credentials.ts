@@ -1,0 +1,53 @@
+import { defaultProvider, fromIni } from "@aws-sdk/credential-provider-node";
+import type { AwsCredentialIdentityProvider } from "@aws-sdk/types";
+import { AwsxCredentialSource, type AwsxCredentialConfig } from "./types";
+
+export const resolveCredentialProvider = (
+  config: AwsxCredentialConfig,
+): AwsCredentialIdentityProvider => {
+  const source = config.source;
+
+  if (source === AwsxCredentialSource.Static) {
+    if (!config.accessKeyId || !config.secretAccessKey) {
+      throw new Error("[awsx] Static credentials require accessKeyId and secretAccessKey.");
+    }
+    return async () => ({
+      accessKeyId: config.accessKeyId,
+      secretAccessKey: config.secretAccessKey,
+      sessionToken: config.sessionToken,
+    });
+  }
+
+  if (source === AwsxCredentialSource.Profile) {
+    if (!config.profile) {
+      throw new Error("[awsx] Profile credentials require a profile name.");
+    }
+    return fromIni({ profile: config.profile });
+  }
+
+  if (source === AwsxCredentialSource.Default) {
+    return defaultProvider();
+  }
+
+  if (config.accessKeyId && config.secretAccessKey) {
+    return async () => ({
+      accessKeyId: config.accessKeyId,
+      secretAccessKey: config.secretAccessKey,
+      sessionToken: config.sessionToken,
+    });
+  }
+
+  if (config.profile) {
+    return fromIni({ profile: config.profile });
+  }
+
+  return defaultProvider();
+};
+
+export const resolveRegion = (
+  serviceRegion: string | undefined,
+  credentialConfig: AwsxCredentialConfig,
+): string | undefined => {
+  const envRegion = process.env.AWS_REGION ?? process.env.AWS_DEFAULT_REGION;
+  return credentialConfig.region ?? serviceRegion ?? envRegion;
+};

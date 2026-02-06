@@ -1,0 +1,41 @@
+{
+  "name": "@nestp/awsx",
+  "version": "0.1.0",
+  "description": "One-stop AWS integrations for NestJS with unified config and CLI",
+  "type": "commonjs",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "awsx": "dist/cli/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "dev": "tsdown --watch"
+  },
+  "dependencies": {
+    "@aws-sdk/client-route-53": "^3.552.0",
+    "@aws-sdk/client-s3": "^3.552.0",
+    "@aws-sdk/client-ses": "^3.552.0",
+    "@aws-sdk/client-sqs": "^3.552.0",
+    "@aws-sdk/credential-provider-node": "^3.552.0",
+    "commander": "^11.1.0",
+    "picocolors": "^1.0.0",
+    "prompts": "^2.4.2"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^10.0.0",
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "@nestjs/common": "^10.0.0",
+    "@types/prompts": "^2.4.7",
+    "@types/node": "^20.11.30",
+    "reflect-metadata": "^0.1.13",
+    "tsdown": "^0.20.1",
+    "typescript": "^5.4.2"
+  }
+}
