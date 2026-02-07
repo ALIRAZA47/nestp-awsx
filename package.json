@@ -59,6 +59,7 @@
     "@aws-sdk/client-ses": "^3.552.0",
     "@aws-sdk/client-sqs": "^3.552.0",
     "@aws-sdk/credential-provider-node": "^3.552.0",
+    "@aws-sdk/lib-storage": "^3.552.0",
     "@aws-sdk/s3-request-presigner": "^3.552.0",
     "commander": "^11.1.0",
     "picocolors": "^1.0.0",

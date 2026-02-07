@@ -20,6 +20,7 @@ type CredentialConfig = {
 
 type ServiceConfig = {
   region?: string;
+  defaultBucket?: string;
   credentials?: CredentialConfig;
 };
 
@@ -147,12 +148,23 @@ const promptServiceConfig = async (
     initial: "",
   });
 
+  let defaultBucket: string | undefined;
+  if (serviceName === AwsxServiceKey.S3) {
+    const { bucket } = await prompt<{ bucket: string }>({
+      type: "text",
+      name: "bucket",
+      message: "s3: default bucket (optional)",
+      initial: "",
+    });
+    defaultBucket = bucket || undefined;
+  }
+
   if (useGlobal) {
-    return cleanObject({ region });
+    return cleanObject({ region, defaultBucket });
   }
 
   const cred = await promptCredential(serviceName);
-  return cleanObject({ region, credentials: cred });
+  return cleanObject({ region, defaultBucket, credentials: cred });
 };
 
 const writeConfig = async (filePath: string, config: AwsxConfig) => {

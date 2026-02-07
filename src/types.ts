@@ -14,6 +14,11 @@ export enum AwsxCredentialSource {
   Static = "static",
 }
 
+export enum AwsxS3SignedUrlOperation {
+  GetObject = "getObject",
+  PutObject = "putObject",
+}
+
 export type AwsxCredentialConfig = {
   region?: string;
   accessKeyId?: string;
@@ -26,6 +31,7 @@ export type AwsxCredentialConfig = {
 export type AwsxServiceConfig = {
   region?: string;
   endpoint?: string;
+  defaultBucket?: string;
   credentials?: AwsxCredentialConfig;
   client?: Record<string, unknown>;
 };
@@ -51,6 +57,7 @@ export type AwsxConfig = {
 export type AwsxServiceConfigNormalized = {
   region?: string;
   endpoint?: string;
+  defaultBucket?: string;
   client: Record<string, unknown>;
   credentials: AwsxCredentialConfig;
 };

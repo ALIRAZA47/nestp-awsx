@@ -52,6 +52,15 @@ export const config = {
     }
   }
 };`,
+  s3DefaultBucket: `import { AwsxServiceKey } from "@nestp/awsx";
+
+const config = {
+  services: {
+    [AwsxServiceKey.S3]: {
+      defaultBucket: "my-bucket"
+    }
+  }
+};`,
   loggerConfig: `import { AwsxConsoleLogger } from "@nestp/awsx";
 
 const config = {
@@ -114,18 +123,34 @@ const data = await this.awsx.s3.getJson<{ ok: boolean }>({
   Bucket: "my-bucket",
   Key: "report.json"
 });`,
-  s3SignedUrl: `const url = await this.awsx.s3.getSignedUrl({
-  operation: "getObject",
+  s3SignedUrl: `import { AwsxS3SignedUrlOperation } from "@nestp/awsx";
+
+const url = await this.awsx.s3.getSignedUrl({
+  operation: AwsxS3SignedUrlOperation.GetObject,
   input: { Bucket: "my-bucket", Key: "report.json" },
   expiresIn: 900
 });`,
-  s3PutMany: `await this.awsx.s3.putMany(
+  s3PutMany: `const result = await this.awsx.s3.putMany(
   [
     { Bucket: "my-bucket", Key: "a.json", Body: "{\\"ok\\":true}" },
     { Bucket: "my-bucket", Key: "b.json", Body: "{\\"ok\\":false}" }
   ],
   { concurrency: 3 }
-);`,
+);
+
+if (result.failures.length) {
+  console.error("Failed uploads:", result.failures);
+}`,
+  s3Progress: `await this.awsx.s3.uploadWithProgress({
+  input: {
+    Bucket: "my-bucket",
+    Key: "large-video.mp4",
+    Body: fileStream
+  },
+  onProgress: (progress) => {
+    console.log("Uploaded", progress.loaded, "of", progress.total);
+  }
+});`,
   sqs: `await this.awsx.sqs.sendMessage({
   QueueUrl: "https://sqs.us-east-1.amazonaws.com/123/queue",
   MessageBody: "hello"

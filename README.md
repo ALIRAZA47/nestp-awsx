@@ -74,6 +74,20 @@ AwsxModule.forRoot({
 });
 ```
 
+### Default S3 bucket
+
+```ts
+import { AwsxServiceKey } from "@nestp/awsx";
+
+AwsxModule.forRoot({
+  services: {
+    [AwsxServiceKey.S3]: {
+      defaultBucket: "my-bucket",
+    },
+  },
+});
+```
+
 ### Credential sources
 
 - `default`: AWS default chain (env vars, shared config/credentials files, ECS/EC2 metadata).
@@ -107,6 +121,45 @@ const config = {
     },
   },
 };
+```
+
+### Signed URLs
+
+```ts
+import { AwsxS3SignedUrlOperation } from "@nestp/awsx";
+
+const url = await awsx.s3.getSignedUrl({
+  operation: AwsxS3SignedUrlOperation.GetObject,
+  input: { Bucket: "my-bucket", Key: "report.json" },
+  expiresIn: 900,
+});
+```
+
+### Upload many (failsafe)
+
+```ts
+const result = await awsx.s3.putMany(
+  [
+    { Bucket: "my-bucket", Key: "a.json", Body: "{\"ok\":true}" },
+    { Bucket: "my-bucket", Key: "b.json", Body: "{\"ok\":false}" },
+  ],
+  { concurrency: 3 },
+);
+
+if (result.failures.length) {
+  console.error("Failed uploads:", result.failures);
+}
+```
+
+### Upload with progress
+
+```ts
+await awsx.s3.uploadWithProgress({
+  input: { Bucket: "my-bucket", Key: "large-video.mp4", Body: fileStream },
+  onProgress: (progress) => {
+    console.log("Uploaded", progress.loaded, "of", progress.total);
+  },
+});
 ```
 
 ## Using Services

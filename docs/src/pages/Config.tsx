@@ -29,6 +29,14 @@ const Config = () => (
           </p>
           <CodeBlock>{codeSamples.configTs}</CodeBlock>
         </div>
+        <div className="card">
+          <h3>S3 Default Bucket</h3>
+          <p>
+            Set a default bucket once and omit the <code>Bucket</code> parameter in
+            S3 calls. AWSX will inject it automatically.
+          </p>
+          <CodeBlock>{codeSamples.s3DefaultBucket}</CodeBlock>
+        </div>
       </div>
     </section>
 

@@ -53,7 +53,9 @@ const Services = () => (
         <h2>Helpers</h2>
         <p>
           Convenience methods built on top of SDK commands. They are thin wrappers,
-          so you can always drop down to raw commands for special cases.
+          so you can always drop down to raw commands for special cases. If you
+          configured a default bucket, S3 helpers will use it automatically when
+          <code>Bucket</code> is omitted.
         </p>
       </div>
       <div className="card-stack">
@@ -89,6 +91,10 @@ const Services = () => (
         <div className="card">
           <h3>Upload Many</h3>
           <CodeBlock>{codeSamples.s3PutMany}</CodeBlock>
+        </div>
+        <div className="card">
+          <h3>Upload Progress</h3>
+          <CodeBlock>{codeSamples.s3Progress}</CodeBlock>
         </div>
       </div>
     </section>

@@ -39,6 +39,7 @@ const normalizeServiceConfig = (
   return {
     region: normalizedService.region ?? globalCredentials?.region ?? defaults.region,
     endpoint: normalizedService.endpoint,
+    defaultBucket: normalizedService.defaultBucket,
     client: { ...clientDefaults, ...(normalizedService.client ?? {}) },
     credentials: resolveCredentials(normalizedService.credentials, globalCredentials),
   };
