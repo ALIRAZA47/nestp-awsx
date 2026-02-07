@@ -6,14 +6,18 @@ const Cli = () => (
     <header className="page-header">
       <h1>CLI</h1>
       <p>
-        Interactive commands to install the package and scaffold a clean
-        configuration file.
+        Use the CLI to install AWSX and generate configuration files without
+        leaving your terminal.
       </p>
     </header>
 
     <section className="section">
       <div className="card">
         <h3>Commands</h3>
+        <p>
+          Run <code>setup</code> for a full guided flow, or use the individual
+          commands when you want more control.
+        </p>
         <CodeBlock>{codeSamples.cli}</CodeBlock>
       </div>
     </section>

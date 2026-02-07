@@ -6,19 +6,28 @@ const Services = () => (
     <header className="page-header">
       <h1>Services</h1>
       <p>
-        Use the aggregated AwsxService for quick access, or inject a specific
-        service/client when you want tighter dependencies.
+        AWSX exposes service wrappers that mirror the AWS SDK, plus convenience
+        helpers for common patterns. You can use the aggregated
+        <code>AwsxService</code> or inject a specific service directly.
       </p>
     </header>
 
     <section className="section">
       <div className="card">
         <h3>Aggregated Service</h3>
+        <p>
+          Use this when you want a single dependency and you already know which
+          AWS services you will call.
+        </p>
         <CodeBlock>{codeSamples.awsxService}</CodeBlock>
       </div>
     </section>
 
     <section className="section">
+      <div className="section-title">
+        <h2>Core Operations</h2>
+        <p>These methods are direct wrappers around the AWS SDK commands.</p>
+      </div>
       <div className="card-stack">
         <div className="card">
           <h3>S3</h3>
@@ -43,9 +52,8 @@ const Services = () => (
       <div className="section-title">
         <h2>Helpers</h2>
         <p>
-          Common helper methods built on top of AWS SDK calls. They are thin
-          wrappers, so you can still fall back to raw client methods when you
-          need full control.
+          Convenience methods built on top of SDK commands. They are thin wrappers,
+          so you can always drop down to raw commands for special cases.
         </p>
       </div>
       <div className="card-stack">
@@ -88,6 +96,9 @@ const Services = () => (
     <section className="section">
       <div className="card">
         <h3>SQS Batch Sends</h3>
+        <p>
+          Batch sends are ideal for high-throughput workloads and reduce API calls.
+        </p>
         <CodeBlock>{codeSamples.sqsBatch}</CodeBlock>
       </div>
     </section>
@@ -96,10 +107,17 @@ const Services = () => (
       <div className="card-stack">
         <div className="card">
           <h3>Inject a Raw Client</h3>
+          <p>
+            Use this when you want full access to the AWS SDK client surface area.
+          </p>
           <CodeBlock>{codeSamples.injectClient}</CodeBlock>
         </div>
         <div className="card">
           <h3>Inject a Service</h3>
+          <p>
+            Prefer service injection when you want the AWSX helper methods but
+            still keep your dependencies tight.
+          </p>
           <CodeBlock>{codeSamples.injectService}</CodeBlock>
         </div>
       </div>

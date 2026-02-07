@@ -8,10 +8,9 @@ const Overview = () => (
         <p className="eyebrow">NestJS + AWS SDK v3</p>
         <h1>All AWS essentials, one NestJS module.</h1>
         <p className="lead">
-          AWSX pulls S3, SQS, SES, and Route53 into a single module with a shared
-          configuration model, explicit credential sources, and clear service APIs.
-          One client per service keeps your dependency graph lean and avoids
-          ambiguous credential selection.
+          AWSX gives you a single, consistent way to wire S3, SQS, SES, and Route53
+          into NestJS. The goal is simple: fewer moving parts, clearer configuration,
+          and predictable clients that are easy to extend and test.
         </p>
       </div>
       <div className="hero-card">
@@ -25,35 +24,39 @@ const Overview = () => (
 
     <section className="section">
       <div className="section-title">
-        <h2>What You Get</h2>
-        <p>Opinionated defaults with enough flexibility to fit real projects.</p>
+        <h2>What AWSX Solves</h2>
+        <p>
+          You still use the official AWS SDK clients, but AWSX removes the repetitive
+          wiring and exposes clean, focused services for the most common tasks.
+        </p>
       </div>
       <div className="card-stack">
         <article className="card">
-          <h3>Single Client per Service</h3>
+          <h3>One Client per Service</h3>
           <p>
-            One client instance per AWS service keeps runtime predictable and avoids
-            credential confusion.
+            Each service gets exactly one client instance. No more guessing which
+            credentials were used to build which client.
           </p>
         </article>
         <article className="card">
-          <h3>Unified Config</h3>
+          <h3>Unified Configuration</h3>
           <p>
-            Centralize defaults and override per service without scattering AWS
-            setup across your codebase.
+            Set global defaults once, override per service only where needed, and
+            keep configuration close to your module boundaries.
           </p>
         </article>
         <article className="card">
-          <h3>Typed Tokens</h3>
+          <h3>Typed Tokens & Keys</h3>
           <p>
-            Use enums for tokens and service keys, eliminating magic strings.
+            Enums for tokens and service keys remove magic strings and prevent
+            subtle injection mistakes.
           </p>
         </article>
         <article className="card">
-          <h3>Easy Extension</h3>
+          <h3>Extensible by Design</h3>
           <p>
-            Override any service with NestJS providers when you need custom
-            behavior.
+            Swap any service with your own implementation by providing a NestJS
+            provider. No forks required.
           </p>
         </article>
       </div>

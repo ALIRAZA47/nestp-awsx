@@ -6,8 +6,9 @@ const Credentials = () => (
     <header className="page-header">
       <h1>Credentials</h1>
       <p>
-        Choose the credential strategy that fits your environment, from the AWS
-        default chain to profiles or explicit static keys.
+        AWSX supports the same credential flows as the AWS SDK. You can rely on
+        the default chain, point to a profile, or inject credentials from a
+        secrets manager.
       </p>
     </header>
 
@@ -15,10 +16,18 @@ const Credentials = () => (
       <div className="card-stack">
         <div className="card">
           <h3>Credential Sources</h3>
+          <p>
+            Pick a source explicitly so your intent is clear and environments
+            behave consistently.
+          </p>
           <CodeBlock>{codeSamples.credentialSources}</CodeBlock>
         </div>
         <div className="card">
           <h3>Using a Credential Manager</h3>
+          <p>
+            Fetch secrets on startup and pass them to AWSX. This pattern works
+            well with Vault, AWS Secrets Manager, or any internal service.
+          </p>
           <CodeBlock>{codeSamples.credentialManager}</CodeBlock>
         </div>
       </div>
@@ -32,7 +41,7 @@ const Credentials = () => (
           (env vars, shared config/credentials files, ECS/EC2 metadata, etc.).
           Use <strong>profile</strong> to read a named profile. Use
           <strong>static</strong> when you want to pass keys explicitly or when
-          you are loading them from a secrets manager at runtime.
+          you load them from a secrets manager.
         </p>
       </div>
     </section>

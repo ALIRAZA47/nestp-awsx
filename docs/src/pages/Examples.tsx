@@ -6,7 +6,8 @@ const Examples = () => (
     <header className="page-header">
       <h1>Examples</h1>
       <p>
-        Reference configuration and usage patterns taken directly from the repo.
+        The repo ships with complete runnable examples so you can copy a working
+        setup and iterate quickly.
       </p>
     </header>
 
@@ -14,10 +15,17 @@ const Examples = () => (
       <div className="card-stack">
         <div className="card">
           <h3>Basic Config</h3>
+          <p>
+            The simplest setup uses the default credential chain and a single
+            region. Great for local development and most apps.
+          </p>
           <CodeBlock>{codeSamples.exampleConfig}</CodeBlock>
         </div>
         <div className="card">
           <h3>Service Usage</h3>
+          <p>
+            The example below shows how a single NestJS service can call AWSX.
+          </p>
           <CodeBlock>{codeSamples.awsxService}</CodeBlock>
         </div>
       </div>
@@ -26,6 +34,9 @@ const Examples = () => (
     <section className="section">
       <div className="card">
         <h3>Example File Map</h3>
+        <p>
+          Use this structure as a reference when wiring AWSX into your own app.
+        </p>
         <CodeBlock>{codeSamples.exampleFiles}</CodeBlock>
       </div>
     </section>
