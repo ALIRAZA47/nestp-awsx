@@ -19,6 +19,17 @@ export enum AwsxS3SignedUrlOperation {
   PutObject = "putObject",
 }
 
+export enum AwsxRoute53ChangeAction {
+  Create = "CREATE",
+  Delete = "DELETE",
+  Upsert = "UPSERT",
+}
+
+export enum AwsxRoute53RecordType {
+  A = "A",
+  Txt = "TXT",
+}
+
 export type AwsxCredentialConfig = {
   region?: string;
   accessKeyId?: string;

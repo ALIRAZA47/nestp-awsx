@@ -13,19 +13,19 @@
   },
   "homepage": "https://github.com/ALIRAZA47/nestp-awsx#readme",
   "type": "commonjs",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.cts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.js"
+      "types": "./dist/index.d.cts",
+      "require": "./dist/index.cjs"
     },
     "./cli": {
-      "require": "./dist/cli/index.js"
+      "require": "./dist/cli/index.cjs"
     }
   },
   "bin": {
-    "awsx": "dist/cli/index.js"
+    "awsx": "dist/cli/index.cjs"
   },
   "files": [
     "dist",

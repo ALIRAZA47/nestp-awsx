@@ -1,4 +1,4 @@
-import { defaultProvider, fromIni } from "@aws-sdk/credential-provider-node";
+import { defaultProvider } from "@aws-sdk/credential-provider-node";
 import type { AwsCredentialIdentityProvider } from "@aws-sdk/types";
 import { AwsxCredentialSource, type AwsxCredentialConfig } from "./types";
 
@@ -8,12 +8,14 @@ export const resolveCredentialProvider = (
   const source = config.source;
 
   if (source === AwsxCredentialSource.Static) {
-    if (!config.accessKeyId || !config.secretAccessKey) {
+    const accessKeyId = config.accessKeyId;
+    const secretAccessKey = config.secretAccessKey;
+    if (!accessKeyId || !secretAccessKey) {
       throw new Error("[awsx] Static credentials require accessKeyId and secretAccessKey.");
     }
     return async () => ({
-      accessKeyId: config.accessKeyId,
-      secretAccessKey: config.secretAccessKey,
+      accessKeyId,
+      secretAccessKey,
       sessionToken: config.sessionToken,
     });
   }
@@ -22,7 +24,7 @@ export const resolveCredentialProvider = (
     if (!config.profile) {
       throw new Error("[awsx] Profile credentials require a profile name.");
     }
-    return fromIni({ profile: config.profile });
+    return defaultProvider({ profile: config.profile });
   }
 
   if (source === AwsxCredentialSource.Default) {
@@ -30,15 +32,17 @@ export const resolveCredentialProvider = (
   }
 
   if (config.accessKeyId && config.secretAccessKey) {
+    const accessKeyId = config.accessKeyId;
+    const secretAccessKey = config.secretAccessKey;
     return async () => ({
-      accessKeyId: config.accessKeyId,
-      secretAccessKey: config.secretAccessKey,
+      accessKeyId,
+      secretAccessKey,
       sessionToken: config.sessionToken,
     });
   }
 
   if (config.profile) {
-    return fromIni({ profile: config.profile });
+    return defaultProvider({ profile: config.profile });
   }
 
   return defaultProvider();

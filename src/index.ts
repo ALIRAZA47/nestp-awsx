@@ -1,7 +1,13 @@
 export { AwsxModule } from "./awsx.module";
 export { AwsxService } from "./awsx.service";
 export { AwsxToken } from "./constants";
-export { AwsxCredentialSource, AwsxServiceKey, AwsxS3SignedUrlOperation } from "./types";
+export {
+  AwsxCredentialSource,
+  AwsxRoute53ChangeAction,
+  AwsxRoute53RecordType,
+  AwsxServiceKey,
+  AwsxS3SignedUrlOperation,
+} from "./types";
 export { AwsxConsoleLogger } from "./logger";
 export { S3Service } from "./services/s3.service";
 export { SqsService } from "./services/sqs.service";

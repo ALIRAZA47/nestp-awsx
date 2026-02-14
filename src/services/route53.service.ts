@@ -9,6 +9,7 @@ import {
   Route53Client,
 } from "@aws-sdk/client-route-53";
 import { AwsxToken } from "../constants";
+import { AwsxRoute53ChangeAction, AwsxRoute53RecordType } from "../types";
 
 @Injectable()
 export class Route53Service {
@@ -40,10 +41,10 @@ export class Route53Service {
       ChangeBatch: {
         Changes: [
           {
-            Action: "UPSERT",
+            Action: AwsxRoute53ChangeAction.Upsert,
             ResourceRecordSet: {
               Name: params.name,
-              Type: "A",
+              Type: AwsxRoute53RecordType.A,
               TTL: params.ttl ?? 60,
               ResourceRecords: params.values.map((value) => ({ Value: value })),
             },
@@ -64,10 +65,10 @@ export class Route53Service {
       ChangeBatch: {
         Changes: [
           {
-            Action: "UPSERT",
+            Action: AwsxRoute53ChangeAction.Upsert,
             ResourceRecordSet: {
               Name: params.name,
-              Type: "TXT",
+              Type: AwsxRoute53RecordType.Txt,
               TTL: params.ttl ?? 300,
               ResourceRecords: params.values.map((value) => ({ Value: value })),
             },

@@ -6,6 +6,11 @@
     "moduleResolution": "bundler",
     "strict": true,
     "jsx": "react-jsx",
+    "types": ["vite/client"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
     "noEmit": true,
     "skipLibCheck": true
   },
