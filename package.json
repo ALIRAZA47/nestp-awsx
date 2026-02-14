@@ -36,8 +36,8 @@
     "build": "tsdown",
     "dev": "tsdown --watch",
     "prepublishOnly": "npm run build",
-    "docs:build": "vite build --outDir docs/dist",
-    "docs:dev": "vite dev"
+    "docs:build": "cd docs && npm run build",
+    "docs:dev": "cd docs && npm run dev"
   },
   "keywords": [
     "nestjs",
