@@ -13,6 +13,7 @@ import { S3Page } from "@/pages/service-s3";
 import { SesPage } from "@/pages/service-ses";
 import { SqsPage } from "@/pages/service-sqs";
 import { ServicesOverviewPage } from "@/pages/services-overview";
+import { WebAnalyticsPage } from "@/pages/web-analytics";
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
       <Route element={<DocsLayout />}>
         <Route path="/" element={<IntroductionPage />} />
         <Route path="/installation" element={<InstallationPage />} />
+        <Route path="/web-analytics" element={<WebAnalyticsPage />} />
         <Route path="/configuration" element={<ConfigurationPage />} />
         <Route path="/credentials" element={<CredentialsPage />} />
         <Route path="/dependency-injection" element={<DependencyInjectionPage />} />

@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import {
+  BarChart3,
   BookOpenText,
   Braces,
   Cable,
@@ -32,6 +33,7 @@ export const docsNavigation: NavSection[] = [
     items: [
       { title: "Introduction", href: "/", icon: BookOpenText },
       { title: "Installation", href: "/installation", icon: Download },
+      { title: "Web Analytics", href: "/web-analytics", icon: BarChart3 },
     ],
   },
   {
