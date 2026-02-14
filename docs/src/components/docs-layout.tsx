@@ -52,6 +52,11 @@ export function DocsLayout() {
                 <Button variant="outline" size="icon" onClick={() => setCollapsed((v) => !v)}>
                   {collapsed ? <PanelLeftOpen className="h-4 w-4" /> : <PanelLeftClose className="h-4 w-4" />}
                 </Button>
+                <img
+                  src="/awsx-logo.svg"
+                  alt="AWSX Logo"
+                  className="h-9 w-9 rounded-md border border-white/25 shadow-md shadow-slate-900/25"
+                />
                 <div>
                   <p className="text-sm font-semibold">{title}</p>
                   <p className="text-xs text-muted-foreground">Complete package guide</p>

@@ -35,7 +35,11 @@ export function AppSidebar({ collapsed, onNavigate }: AppSidebarProps) {
       )}
     >
       <div className="flex h-16 items-center gap-3 px-4">
-        <div className="flex h-9 w-9 items-center justify-center rounded-md bg-primary/90 text-primary-foreground">A</div>
+        <img
+          src="/awsx-logo.svg"
+          alt="AWSX Logo"
+          className="h-9 w-9 rounded-md border border-white/25 shadow-md shadow-slate-900/30"
+        />
         {!collapsed ? (
           <div>
             <p className="text-sm font-semibold">AWSX Docs</p>

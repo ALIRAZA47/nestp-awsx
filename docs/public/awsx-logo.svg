@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256" role="img" aria-labelledby="title desc">
+  <title id="title">NestP AWSX Mark</title>
+  <desc id="desc">AWS-inspired cloud badge with integration nodes, AX monogram, and orange smile accent for NestP AWSX.</desc>
+  <defs>
+    <linearGradient id="bg" x1="24" y1="24" x2="232" y2="232" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="0.48" stop-color="#0b3b6f"/>
+      <stop offset="1" stop-color="#0a5d86"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0" cy="0" r="1" gradientTransform="translate(70 64) rotate(40) scale(210)">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.3"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="smile" x1="74" y1="196" x2="185" y2="188" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ffb347"/>
+      <stop offset="1" stop-color="#ff9900"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="16" y="16" width="224" height="224" rx="52" fill="url(#bg)"/>
+  <rect x="16" y="16" width="224" height="224" rx="52" fill="url(#glow)"/>
+  <path d="M32 44c32-22 74-28 128-18 22 4 43 11 64 23v42c-26-14-51-23-74-26-39-6-75 1-110 22-7 4-12 1-12-7V44z" fill="#fff" fill-opacity="0.12"/>
+
+  <g fill="none" stroke="#fff" stroke-opacity="0.25" stroke-width="5">
+    <path d="M128 60v120"/>
+    <path d="M60 120h136"/>
+    <path d="M128 68l56 32v56l-56 32-56-32v-56z"/>
+  </g>
+
+  <g fill="#fff">
+    <rect x="118" y="44" width="20" height="20" rx="5"/>
+    <rect x="192" y="118" width="20" height="20" rx="5"/>
+    <rect x="118" y="192" width="20" height="20" rx="5"/>
+    <rect x="44" y="118" width="20" height="20" rx="5"/>
+  </g>
+
+  <g fill="none" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M94 168L128 86l34 82" stroke-width="14"/>
+    <path d="M109 138h38" stroke-width="12"/>
+  </g>
+
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M76 193c21 14 50 18 82 13 10-1 18-4 25-9" stroke="url(#smile)" stroke-width="10"/>
+    <path d="M174 191l13 0-6 10" stroke="#ff9900" stroke-width="6"/>
+  </g>
+</svg>
