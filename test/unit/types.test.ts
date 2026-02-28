@@ -5,7 +5,7 @@ import {
   AwsxS3SignedUrlOperation,
   AwsxRoute53ChangeAction,
   AwsxRoute53RecordType,
-} from "./types";
+} from "../../src/types";
 
 describe("AwsxServiceKey", () => {
   it("has expected service keys", () => {

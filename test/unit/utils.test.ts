@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { Readable } from "stream";
-import { toBuffer } from "./utils";
+import { toBuffer } from "../../src/utils";
 
 describe("toBuffer", () => {
   describe("null and undefined", () => {

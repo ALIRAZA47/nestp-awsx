@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { existsSync } from "fs";
-import { detectPackageManager, cleanObject } from "./utils";
+import { detectPackageManager, cleanObject } from "../../src/cli/utils";
 
 vi.mock("fs", () => ({
   existsSync: vi.fn(),

@@ -1,8 +1,8 @@
 import { describe, it, expect } from "vitest";
 import { Test } from "@nestjs/testing";
-import { AwsxModule } from "./awsx.module";
-import { AwsxService } from "./awsx.service";
-import { AwsxServiceKey } from "./types";
+import { AwsxModule } from "../../src/awsx.module";
+import { AwsxService } from "../../src/awsx.service";
+import { AwsxServiceKey } from "../../src/types";
 
 describe("AwsxService", () => {
   const config = {

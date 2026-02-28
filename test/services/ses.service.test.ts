@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { SesService } from "./ses.service";
+import { SesService } from "../../src/services/ses.service";
 
 describe("SesService", () => {
   let sesService: SesService;

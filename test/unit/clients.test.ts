@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
-import { createClient } from "./clients";
-import type { AwsxServiceConfigNormalized } from "./types";
+import { createClient } from "../../src/clients";
+import type { AwsxServiceConfigNormalized } from "../../src/types";
 
 describe("createClient", () => {
   it("instantiates client with resolved config", () => {

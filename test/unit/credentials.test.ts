@@ -2,8 +2,8 @@ import { describe, it, expect, afterEach } from "vitest";
 import {
   resolveCredentialProvider,
   resolveRegion,
-} from "./credentials";
-import { AwsxCredentialSource } from "./types";
+} from "../../src/credentials";
+import { AwsxCredentialSource } from "../../src/types";
 
 describe("resolveCredentialProvider", () => {
   describe("AwsxCredentialSource.Static", () => {

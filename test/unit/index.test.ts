@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import * as awsx from "./index";
+import * as awsx from "../../src/index";
 
 describe("index exports", () => {
   it("exports AwsxModule", () => {

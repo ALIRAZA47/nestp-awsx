@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { Route53Service } from "./route53.service";
+import { Route53Service } from "../../src/services/route53.service";
 
 describe("Route53Service", () => {
   let route53Service: Route53Service;

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { AwsxToken } from "./constants";
+import { AwsxToken } from "../../src/constants";
 
 describe("AwsxToken", () => {
   it("has Config token", () => {

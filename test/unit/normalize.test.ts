@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { normalizeConfig } from "./normalize";
-import { AwsxServiceKey } from "./types";
+import { normalizeConfig } from "../../src/normalize";
+import { AwsxServiceKey } from "../../src/types";
 
 describe("normalizeConfig", () => {
   it("returns normalized config with empty defaults when config is empty", () => {

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { S3Service } from "./s3.service";
-import { AwsxServiceKey } from "../types";
-import type { AwsxNormalizedConfig } from "../types";
+import { S3Service } from "../../src/services/s3.service";
+import { AwsxServiceKey } from "../../src/types";
+import type { AwsxNormalizedConfig } from "../../src/types";
 
 vi.mock("@aws-sdk/s3-request-presigner", () => ({
   getSignedUrl: vi.fn().mockResolvedValue("https://signed-url.example.com"),
