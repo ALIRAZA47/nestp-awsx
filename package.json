@@ -37,7 +37,9 @@
     "dev": "tsdown --watch",
     "prepublishOnly": "npm run build",
     "docs:build": "cd docs && npm run build",
-    "docs:dev": "cd docs && npm run dev"
+    "docs:dev": "cd docs && npm run dev",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "keywords": [
     "nestjs",
@@ -73,10 +75,12 @@
   },
   "devDependencies": {
     "@nestjs/common": "^10.0.0",
+    "@nestjs/testing": "^10.0.0",
     "@types/prompts": "^2.4.7",
     "@types/node": "^20.11.30",
     "reflect-metadata": "^0.1.13",
     "tsdown": "^0.20.1",
-    "typescript": "^5.4.2"
+    "typescript": "^5.4.2",
+    "vitest": "^2.1.0"
   }
 }

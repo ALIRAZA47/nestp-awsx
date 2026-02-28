@@ -1,10 +1,11 @@
 import { Command } from "commander";
 import prompts, { type PromptObject } from "prompts";
 import pc from "picocolors";
-import { existsSync, writeFileSync } from "fs";
+import { writeFileSync } from "fs";
 import { join } from "path";
 import { spawnSync } from "child_process";
 import { AwsxCredentialSource, AwsxServiceKey } from "../types";
+import { detectPackageManager, cleanObject } from "./utils";
 
 const DEFAULT_CONFIG_PATH = "awsx.config.json";
 const PACKAGE_NAME = "@nestp/awsx";
@@ -42,14 +43,6 @@ const logHeader = (text: string) => {
   console.log(pc.cyan(text));
 };
 
-const detectPackageManager = (): "npm" | "pnpm" | "yarn" | "bun" => {
-  if (existsSync("pnpm-lock.yaml")) return "pnpm";
-  if (existsSync("yarn.lock")) return "yarn";
-  if (existsSync("bun.lockb")) return "bun";
-  if (existsSync("package-lock.json")) return "npm";
-  return "npm";
-};
-
 const runInstall = (pm: string) => {
   const argsMap: Record<string, string[]> = {
     npm: ["install", PACKAGE_NAME],
@@ -62,24 +55,6 @@ const runInstall = (pm: string) => {
   if (result.status !== 0) {
     throw new Error(`Failed to install ${PACKAGE_NAME} using ${pm}.`);
   }
-};
-
-const cleanObject = <T extends Record<string, any>>(obj: T): T => {
-  const cleaned: Record<string, any> = {};
-  Object.entries(obj).forEach(([key, value]) => {
-    if (value === undefined || value === "") return;
-    if (Array.isArray(value) && value.length === 0) return;
-    if (
-      value &&
-      typeof value === "object" &&
-      !Array.isArray(value) &&
-      Object.keys(value).length === 0
-    ) {
-      return;
-    }
-    cleaned[key] = value;
-  });
-  return cleaned as T;
 };
 
 const promptCredential = async (label: string): Promise<CredentialConfig> => {
