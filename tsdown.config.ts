@@ -1,12 +1,13 @@
-import { defineConfig } from "tsdown";
+import { defineConfig, type UserConfig } from "tsdown";
 
-const shared = {
+const shared: Partial<UserConfig> = {
   outDir: "dist",
   format: ["cjs"],
   dts: true,
   sourcemap: true,
   target: "es2020",
   platform: "node",
+  inlineOnly: ['@smithy/types', '@aws-sdk/types'],
 };
 
 export default defineConfig([
