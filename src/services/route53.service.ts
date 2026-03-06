@@ -16,7 +16,7 @@ export class Route53Service {
   constructor(
     @Inject(AwsxToken.Route53Client)
     private readonly client: Route53Client,
-  ) {}
+  ) { }
 
   async changeRecordSets(
     params: ChangeResourceRecordSetsCommandInput,

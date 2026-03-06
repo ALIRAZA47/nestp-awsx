@@ -18,5 +18,5 @@ export class AwsxService {
     public readonly ses: SesService,
     @Inject(AwsxToken.Route53Service)
     public readonly route53: Route53Service,
-  ) {}
+  ) { }
 }

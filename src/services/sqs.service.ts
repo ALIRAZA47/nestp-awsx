@@ -25,7 +25,7 @@ export class SqsService {
   constructor(
     @Inject(AwsxToken.SqsClient)
     private readonly client: SQSClient,
-  ) {}
+  ) { }
 
   async sendMessage(params: SendMessageCommandInput): Promise<SendMessageCommandOutput> {
     return this.client.send(new SendMessageCommand(params));

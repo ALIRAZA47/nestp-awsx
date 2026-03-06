@@ -12,7 +12,7 @@ export class SesService {
   constructor(
     @Inject(AwsxToken.SesClient)
     private readonly client: SESClient,
-  ) {}
+  ) { }
 
   async sendEmail(params: SendEmailCommandInput): Promise<SendEmailCommandOutput> {
     return this.client.send(new SendEmailCommand(params));

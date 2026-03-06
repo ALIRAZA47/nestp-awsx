@@ -141,15 +141,15 @@ export class S3Service {
   async getSignedUrl(
     params:
       | {
-          operation: AwsxS3SignedUrlOperation.GetObject;
-          input: S3Input<GetObjectCommandInput>;
-          expiresIn?: number;
-        }
+        operation: AwsxS3SignedUrlOperation.GetObject;
+        input: S3Input<GetObjectCommandInput>;
+        expiresIn?: number;
+      }
       | {
-          operation: AwsxS3SignedUrlOperation.PutObject;
-          input: S3Input<PutObjectCommandInput>;
-          expiresIn?: number;
-        },
+        operation: AwsxS3SignedUrlOperation.PutObject;
+        input: S3Input<PutObjectCommandInput>;
+        expiresIn?: number;
+      },
   ): Promise<string> {
     const input = this.withBucket(params.input);
     const command =

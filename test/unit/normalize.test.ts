@@ -75,7 +75,7 @@ describe("normalizeConfig", () => {
   });
 
   it("defaults.logger is used when enableLogger is true", () => {
-    const customLogger = { info: () => {}, debug: () => {}, warn: () => {}, error: () => {} };
+    const customLogger = { info: () => { }, debug: () => { }, warn: () => { }, error: () => { } };
     const config = {
       defaults: { enableLogger: true, logger: customLogger },
     };
