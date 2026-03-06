@@ -7,7 +7,7 @@ const shared: Partial<UserConfig> = {
   sourcemap: true,
   target: "es2020",
   platform: "node",
-  inlineOnly: ['@smithy/types', '@aws-sdk/types'],
+  inlineOnly: false,
 };
 
 export default defineConfig([

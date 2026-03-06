@@ -1,6 +1,6 @@
 {
   "name": "@nestp/awsx",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "One-stop AWS integrations for NestJS with unified config and CLI",
   "license": "MIT",
   "author": "ALIRAZA47",
@@ -21,6 +21,7 @@
       "require": "./dist/index.cjs"
     },
     "./cli": {
+      "types": "./dist/cli/index.d.cts",
       "require": "./dist/cli/index.cjs"
     }
   },

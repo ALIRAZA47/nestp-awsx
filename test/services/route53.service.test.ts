@@ -81,18 +81,31 @@ describe("Route53Service", () => {
   });
 
   describe("upsertTxtRecord", () => {
-    it("builds correct ChangeBatch with TXT type", async () => {
+    it("formats TXT values with quotes per Route53 spec", async () => {
       sendMock.mockResolvedValue({});
       await route53Service.upsertTxtRecord({
         zoneId: "Z123",
         name: "_acme.example.com",
-        values: ['"verification-value"'],
+        values: ["verification-value"],
       });
       const call = sendMock.mock.calls[0][0];
       expect(call.input.ChangeBatch.Changes[0].ResourceRecordSet.Type).toBe("TXT");
       expect(call.input.ChangeBatch.Changes[0].ResourceRecordSet.TTL).toBe(300);
       expect(call.input.ChangeBatch.Changes[0].ResourceRecordSet.ResourceRecords).toEqual([
         { Value: '"verification-value"' },
+      ]);
+    });
+
+    it("joins multiple values as space-separated quoted strings", async () => {
+      sendMock.mockResolvedValue({});
+      await route53Service.upsertTxtRecord({
+        zoneId: "Z123",
+        name: "example.com",
+        values: ["v=spf1", "include:_spf.google.com"],
+      });
+      const call = sendMock.mock.calls[0][0];
+      expect(call.input.ChangeBatch.Changes[0].ResourceRecordSet.ResourceRecords).toEqual([
+        { Value: '"v=spf1" "include:_spf.google.com"' },
       ]);
     });
 
