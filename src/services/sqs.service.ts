@@ -51,10 +51,22 @@ export class SqsService {
     params: ReceiveMessageCommandInput,
   ): Promise<Array<{ messageId?: string; body: T }>> {
     const result = await this.receiveMessages(params);
-    return (result.Messages ?? []).map((message) => ({
-      messageId: message.MessageId,
-      body: message.Body ? (JSON.parse(message.Body) as T) : (null as T),
-    }));
+    return (result.Messages ?? []).map((message) => {
+      if (!message.Body) {
+        return { messageId: message.MessageId, body: null as T };
+      }
+      try {
+        return {
+          messageId: message.MessageId,
+          body: JSON.parse(message.Body) as T,
+        };
+      } catch (error) {
+        const msg = `[awsx] Invalid JSON in SQS message ${message.MessageId ?? "(no id)"}`;
+        throw error instanceof SyntaxError
+          ? new SyntaxError(`${msg}: ${(error as SyntaxError).message}`)
+          : new Error(`${msg}: ${String(error)}`);
+      }
+    });
   }
 
   async deleteMessage(params: DeleteMessageCommandInput) {

@@ -60,6 +60,11 @@ export class Route53Service {
     values: string[];
     ttl?: number;
   }): Promise<ChangeResourceRecordSetsCommandOutput> {
+    const formattedValues = params.values.map((v) => {
+      const escaped = v.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+      return `"${escaped}"`;
+    });
+    const value = formattedValues.join(" ");
     return this.changeRecordSets({
       HostedZoneId: params.zoneId,
       ChangeBatch: {
@@ -70,7 +75,7 @@ export class Route53Service {
               Name: params.name,
               Type: AwsxRoute53RecordType.Txt,
               TTL: params.ttl ?? 300,
-              ResourceRecords: params.values.map((value) => ({ Value: value })),
+              ResourceRecords: [{ Value: value }],
             },
           },
         ],

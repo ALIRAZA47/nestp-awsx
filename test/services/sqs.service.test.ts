@@ -92,6 +92,17 @@ describe("SqsService", () => {
       });
       expect(result).toEqual([]);
     });
+
+    it("throws descriptive error on malformed JSON", async () => {
+      sendMock.mockResolvedValue({
+        Messages: [{ MessageId: "1", Body: "not valid json {" }],
+      });
+      await expect(
+        sqsService.receiveJson({
+          QueueUrl: "https://sqs.us-east-1.amazonaws.com/123/queue",
+        }),
+      ).rejects.toThrow("[awsx] Invalid JSON in SQS message 1");
+    });
   });
 
   describe("sendJsonBatch", () => {

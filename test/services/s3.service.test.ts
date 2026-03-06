@@ -126,6 +126,13 @@ describe("S3Service", () => {
       const result = await s3Service.getJson({ Key: "data.json" });
       expect(result).toEqual({ a: 1, b: 2 });
     });
+
+    it("throws descriptive error on malformed JSON", async () => {
+      sendMock.mockResolvedValue({ Body: "not valid json" });
+      await expect(s3Service.getJson({ Key: "bad.json" })).rejects.toThrow(
+        "[awsx] Invalid JSON in S3 object bad.json",
+      );
+    });
   });
 
   describe("exists", () => {

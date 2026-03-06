@@ -134,5 +134,57 @@ describe("AwsxModule", () => {
       });
       expect(mod.imports).toContain(ConfigModule);
     });
+
+    it("throws when useFactory returns undefined", async () => {
+      const mod = AwsxModule.forRootAsync({
+        useFactory: () => undefined as any,
+      });
+      await expect(
+        Test.createTestingModule({ imports: [mod] }).compile(),
+      ).rejects.toThrow("[awsx] useFactory must return a valid AwsxConfig object.");
+    });
+
+    it("throws when useFactory returns null", async () => {
+      const mod = AwsxModule.forRootAsync({
+        useFactory: () => null as any,
+      });
+      await expect(
+        Test.createTestingModule({ imports: [mod] }).compile(),
+      ).rejects.toThrow("[awsx] useFactory must return a valid AwsxConfig object.");
+    });
+  });
+
+  describe("forRootFromFile", () => {
+    it("loads config from file and creates working module", async () => {
+      const { writeFileSync, mkdirSync } = await import("fs");
+      const { join } = await import("path");
+      const tmpDir = join(process.cwd(), "test-tmp-awsx");
+      mkdirSync(tmpDir, { recursive: true });
+      const configPath = join(tmpDir, "awsx.config.json");
+      writeFileSync(
+        configPath,
+        JSON.stringify({
+          defaults: { region: "us-east-1" },
+          services: {
+            s3: { credentials: { accessKeyId: "AKIA", secretAccessKey: "s" } },
+            sqs: { credentials: { accessKeyId: "AKIA", secretAccessKey: "s" } },
+            ses: { credentials: { accessKeyId: "AKIA", secretAccessKey: "s" } },
+            route53: { credentials: { accessKeyId: "AKIA", secretAccessKey: "s" } },
+          },
+        }),
+      );
+      const origCwd = process.cwd();
+      process.chdir(tmpDir);
+      try {
+        const mod = AwsxModule.forRootFromFile("awsx.config.json");
+        const moduleRef = await Test.createTestingModule({ imports: [mod] }).compile();
+        const awsx = moduleRef.get(AwsxService);
+        expect(awsx).toBeDefined();
+      } finally {
+        process.chdir(origCwd);
+        const { rmSync } = await import("fs");
+        rmSync(tmpDir, { recursive: true });
+      }
+    });
   });
 });

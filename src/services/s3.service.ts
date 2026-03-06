@@ -135,7 +135,15 @@ export class S3Service {
   async getJson<T = unknown>(params: S3Input<GetObjectCommandInput>): Promise<T> {
     const result = await this.getObject(params);
     const text = result.body.toString("utf-8");
-    return JSON.parse(text) as T;
+    const key = params.Key ?? "(unknown)";
+    try {
+      return JSON.parse(text) as T;
+    } catch (error) {
+      const msg = `[awsx] Invalid JSON in S3 object ${key}`;
+      throw error instanceof SyntaxError
+        ? new SyntaxError(`${msg}: ${(error as SyntaxError).message}`)
+        : new Error(`${msg}: ${String(error)}`);
+    }
   }
 
   async getSignedUrl(
@@ -165,6 +173,11 @@ export class S3Service {
     return this.client.send(new DeleteObjectsCommand(this.withBucket(params)));
   }
 
+  /**
+   * Upload multiple objects with configurable concurrency.
+   * Returns successes and failures; does not throw on individual failures.
+   * When items is empty, returns { successes: [], failures: [] } immediately.
+   */
   async putMany(
     items: S3Input<PutObjectCommandInput>[],
     options: { concurrency?: number } = {},

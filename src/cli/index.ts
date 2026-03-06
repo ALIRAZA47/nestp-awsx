@@ -1,7 +1,7 @@
 import { Command } from "commander";
 import prompts, { type PromptObject } from "prompts";
 import pc from "picocolors";
-import { writeFileSync } from "fs";
+import { existsSync, readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import { spawnSync } from "child_process";
 import { AwsxCredentialSource, AwsxServiceKey } from "../types";
@@ -158,6 +158,18 @@ const writeConfig = async (filePath: string, config: AwsxConfig) => {
   }
 
   writeFileSync(resolved, JSON.stringify(config, null, 2));
+
+  const hasSecrets =
+    config.global?.accessKeyId ||
+    config.global?.secretAccessKey ||
+    Object.values(config.services ?? {}).some(
+      (s) => s?.credentials?.accessKeyId || s?.credentials?.secretAccessKey,
+    );
+  if (hasSecrets) {
+    console.log(
+      pc.yellow("Note: Config contains credentials. Add to .gitignore: " + filePath),
+    );
+  }
 };
 
 const initFlow = async (withHeader = true) => {
@@ -279,12 +291,22 @@ const setupFlow = async () => {
   console.log(pc.green("Setup complete."));
 };
 
+const getVersion = (): string => {
+  try {
+    const pkgPath = join(__dirname, "..", "..", "package.json");
+    const pkg = JSON.parse(readFileSync(pkgPath, "utf-8"));
+    return pkg.version ?? "0.1.0";
+  } catch {
+    return "0.1.0";
+  }
+};
+
 const program = new Command();
 
 program
   .name("awsx")
   .description("AWSX CLI for NestJS AWS integrations")
-  .version("0.1.0");
+  .version(getVersion());
 
 program
   .command("init")
