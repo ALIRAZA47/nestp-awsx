@@ -17,8 +17,8 @@ export function Route53Page() {
         </CardHeader>
         <CardContent className="docs-prose">
           <p>Core methods: `listHostedZones` and `changeRecordSets`.</p>
-          <p>Helpers: `upsertARecord` and `upsertTxtRecord` for common DNS update workflows.</p>
-          <p>Helpers generate UPSERT change sets with sensible TTL defaults.</p>
+          <p>Helpers: `upsertARecord`, `upsertCnameRecord`, `upsertAaaaRecord`, and `upsertTxtRecord` for common DNS update workflows. CNAME takes a single target; AAAA takes an array of IPv6 addresses.</p>
+          <p>Helpers generate UPSERT change sets with sensible TTL defaults; TXT values are quoted per Route53 spec.</p>
         </CardContent>
       </Card>
 

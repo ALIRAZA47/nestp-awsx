@@ -102,6 +102,21 @@ AwsxModule.forRoot({
 });
 ```
 
+### Default SQS queue URL
+
+Set `defaultQueueUrl` in SQS service config so you can omit `QueueUrl` when sending, receiving, or deleting messages:
+
+```ts
+AwsxModule.forRoot({
+  services: {
+    [AwsxServiceKey.Sqs]: {
+      defaultQueueUrl: "https://sqs.us-east-1.amazonaws.com/123/my-queue",
+    },
+  },
+});
+// In service: await this.sqs.sendJson({ orderId: 1 });
+```
+
 ### Credential sources
 
 - `default`: AWS default chain (env vars, shared config/credentials files, ECS/EC2 metadata).
@@ -218,34 +233,7 @@ import type { S3Client } from "@aws-sdk/client-s3";
 constructor(@Inject(AwsxToken.S3Client) private readonly client: S3Client) {}
 ```
 
-## Extending / Overriding
-
-Override any service by providing the injection token in your module:
-
-```ts
-import { Module } from "@nestjs/common";
-import { AwsxModule, AwsxToken } from "@nestp/awsx";
-import { CustomS3Service } from "./custom-s3.service";
-
-@Module({
-  imports: [AwsxModule.forRoot({ defaults: { region: "us-east-1" } })],
-  providers: [{ provide: AwsxToken.S3Service, useClass: CustomS3Service }],
-})
-export class AppModule {}
-```
-
-### Default SQS queue URL
-
-Set `defaultQueueUrl` in SQS service config (like `defaultBucket` for S3). Then omit `QueueUrl` when calling send/receive/delete:
-
-```ts
-AwsxModule.forRoot({
-  services: {
-    [AwsxServiceKey.Sqs]: { defaultQueueUrl: "https://sqs.us-east-1.amazonaws.com/123/my-queue" },
-  },
-});
-// In service: await this.sqs.sendJson({ orderId: 1 }); // uses default queue
-```
+## Features
 
 ### S3 copy and move
 
@@ -328,6 +316,22 @@ Use `AwsxModule.forTesting()` to get a module with mock AWS clients (no real cal
 ```ts
 const mod = AwsxModule.forTesting(undefined, { s3: { send: vi.fn().mockResolvedValue({}) } });
 const moduleRef = await Test.createTestingModule({ imports: [mod] }).compile();
+```
+
+## Extending / Overriding
+
+Override any service by providing the injection token in your module:
+
+```ts
+import { Module } from "@nestjs/common";
+import { AwsxModule, AwsxToken } from "@nestp/awsx";
+import { CustomS3Service } from "./custom-s3.service";
+
+@Module({
+  imports: [AwsxModule.forRoot({ defaults: { region: "us-east-1" } })],
+  providers: [{ provide: AwsxToken.S3Service, useClass: CustomS3Service }],
+})
+export class AppModule {}
 ```
 
 ## CLI

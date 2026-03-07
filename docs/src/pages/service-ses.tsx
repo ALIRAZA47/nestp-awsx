@@ -17,8 +17,8 @@ export function SesPage() {
         </CardHeader>
         <CardContent className="docs-prose">
           <p>Core: `sendEmail` with full AWS SES request support.</p>
-          <p>Helpers: `sendTextEmail` and `sendHtmlEmail` for faster transactional-email setup.</p>
-          <p>Helper methods still map cleanly to SES input fields (`Source`, `Destination`, `Message`).</p>
+          <p>Helpers: `sendTextEmail`, `sendHtmlEmail`, and `sendTemplatedEmail` for transactional and template-based emails. Use `sendTemplatedEmail` with a template name and `templateData` (object, stringified for the API) for welcome emails, password reset, etc.</p>
+          <p>Helper methods still map cleanly to SES input fields (`Source`, `Destination`, `Message`, or `Template`/`TemplateData`).</p>
         </CardContent>
       </Card>
 

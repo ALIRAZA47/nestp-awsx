@@ -24,9 +24,11 @@ AwsxRoute53ChangeAction:
 
 AwsxRoute53RecordType:
 - A
+- Aaaa
+- Cname
 - Txt`;
 
-const exportedSymbols = `AwsxModule
+const exportedSymbols = `AwsxModule (forRoot, forRootAsync, forRootFromFile, forTesting)
 AwsxService
 AwsxToken
 AwsxCredentialSource
@@ -39,6 +41,8 @@ S3Service
 SqsService
 SesService
 Route53Service
+AwsxSqsConsumerService
+AwsxHealthIndicator
 
 Types:
 AwsxAsyncOptions
@@ -46,16 +50,21 @@ AwsxConfig
 AwsxConfigFactory
 AwsxCredentialConfig
 AwsxDefaults
-AwsxServiceConfig`;
+AwsxServiceConfig
+AwsxSqsConsumerOptions
+AwsxHealthIndicatorResult`;
 
 const s3Methods = `putObject
 getObject
+getObjectStream
 deleteObject
 listObjects
 listKeys
 exists
 putJson
 getJson
+copyObject
+moveObject
 getSignedUrl
 deleteMany
 putMany
@@ -69,15 +78,19 @@ deleteMessage
 purgeQueue
 sendBatch
 sendJsonBatch
-deleteBatch`;
+deleteBatch
+processBatch`;
 
 const sesMethods = `sendEmail
 sendTextEmail
-sendHtmlEmail`;
+sendHtmlEmail
+sendTemplatedEmail`;
 
 const route53Methods = `changeRecordSets
 listHostedZones
 upsertARecord
+upsertCnameRecord
+upsertAaaaRecord
 upsertTxtRecord`;
 
 export function ApiReferencePage() {

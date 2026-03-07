@@ -17,8 +17,9 @@ export function SqsPage() {
         </CardHeader>
         <CardContent className="docs-prose">
           <p>Core methods: `sendMessage`, `receiveMessages`, `deleteMessage`, `purgeQueue`, `sendBatch`, `deleteBatch`.</p>
-          <p>Helper methods: `sendJson`, `receiveJson`, and `sendJsonBatch` for JSON-first queue workflows.</p>
-          <p>Batch helpers are useful for reducing API calls and increasing throughput in worker systems.</p>
+          <p>Helper methods: `sendJson`, `receiveJson`, and `sendJsonBatch` for JSON-first queue workflows. When `defaultQueueUrl` is set in config, `QueueUrl` can be omitted and `sendJson(payload)` uses the default queue.</p>
+          <p>`processBatch(params, processor)` receives messages, runs your async processor, then deletes them on success; if the processor throws, messages are not deleted and reappear after visibility timeout.</p>
+          <p>For long-running consumers, inject `AwsxSqsConsumerService` and call `startConsumer(handler, options?)` in `onModuleInit`; it long-polls, invokes the handler per batch, and auto-deletes on success. Use `stopConsumer()` or let `onModuleDestroy` stop it.</p>
         </CardContent>
       </Card>
 
