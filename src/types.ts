@@ -27,6 +27,8 @@ export enum AwsxRoute53ChangeAction {
 
 export enum AwsxRoute53RecordType {
   A = "A",
+  Aaaa = "AAAA",
+  Cname = "CNAME",
   Txt = "TXT",
 }
 
@@ -43,6 +45,7 @@ export type AwsxServiceConfig = {
   region?: string;
   endpoint?: string;
   defaultBucket?: string;
+  defaultQueueUrl?: string;
   credentials?: AwsxCredentialConfig;
   client?: Record<string, unknown>;
 };
@@ -69,6 +72,7 @@ export type AwsxServiceConfigNormalized = {
   region?: string;
   endpoint?: string;
   defaultBucket?: string;
+  defaultQueueUrl?: string;
   client: Record<string, unknown>;
   credentials: AwsxCredentialConfig;
 };

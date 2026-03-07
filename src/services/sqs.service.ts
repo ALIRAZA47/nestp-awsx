@@ -1,12 +1,14 @@
 import { Inject, Injectable } from "@nestjs/common";
+import type { Message } from "@aws-sdk/client-sqs";
 import {
+  DeleteMessageBatchCommand,
   DeleteMessageCommand,
   PurgeQueueCommand,
   ReceiveMessageCommand,
   SendMessageCommand,
-  type DeleteMessageCommandInput,
   type DeleteMessageBatchCommandInput,
   type DeleteMessageBatchCommandOutput,
+  type DeleteMessageCommandInput,
   type PurgeQueueCommandInput,
   type ReceiveMessageCommandInput,
   type ReceiveMessageCommandOutput,
@@ -14,41 +16,79 @@ import {
   type SendMessageBatchCommandOutput,
   type SendMessageCommandInput,
   type SendMessageCommandOutput,
-  DeleteMessageBatchCommand,
   SendMessageBatchCommand,
   SQSClient,
 } from "@aws-sdk/client-sqs";
 import { AwsxToken } from "../constants";
+import { AwsxServiceKey, type AwsxNormalizedConfig } from "../types";
+
+type SqsInput<T> = Omit<T, "QueueUrl"> & { QueueUrl?: string };
 
 @Injectable()
 export class SqsService {
+  private readonly defaultQueueUrl?: string;
+
   constructor(
     @Inject(AwsxToken.SqsClient)
     private readonly client: SQSClient,
-  ) {}
+    @Inject(AwsxToken.Config)
+    config: AwsxNormalizedConfig,
+  ) {
+    this.defaultQueueUrl = config.services[AwsxServiceKey.Sqs]?.defaultQueueUrl;
+  }
 
-  async sendMessage(params: SendMessageCommandInput): Promise<SendMessageCommandOutput> {
-    return this.client.send(new SendMessageCommand(params));
+  private resolveQueueUrl(queueUrl?: string): string {
+    const resolved = queueUrl ?? this.defaultQueueUrl;
+    if (!resolved) {
+      throw new Error("[awsx] SQS queue URL is required. Provide QueueUrl or defaultQueueUrl.");
+    }
+    return resolved;
+  }
+
+  private withQueueUrl<T extends { QueueUrl?: string }>(params: T): T & { QueueUrl: string } {
+    return { ...params, QueueUrl: this.resolveQueueUrl(params.QueueUrl) };
+  }
+
+  async sendMessage(params: SqsInput<SendMessageCommandInput>): Promise<SendMessageCommandOutput> {
+    return this.client.send(new SendMessageCommand(this.withQueueUrl(params)));
   }
 
   async sendJson(
     queueUrl: string,
     payload: unknown,
-    options: Omit<SendMessageCommandInput, "QueueUrl" | "MessageBody"> = {},
+    options?: Omit<SendMessageCommandInput, "QueueUrl" | "MessageBody">,
+  ): Promise<SendMessageCommandOutput>;
+  async sendJson(
+    payload: unknown,
+    options?: Omit<SendMessageCommandInput, "QueueUrl" | "MessageBody">,
+  ): Promise<SendMessageCommandOutput>;
+  async sendJson(
+    queueUrlOrPayload: string | unknown,
+    payloadOrOptions?: unknown,
+    options?: Omit<SendMessageCommandInput, "QueueUrl" | "MessageBody">,
   ): Promise<SendMessageCommandOutput> {
+    if (typeof queueUrlOrPayload === "string") {
+      return this.sendMessage({
+        QueueUrl: this.resolveQueueUrl(queueUrlOrPayload),
+        MessageBody: JSON.stringify(payloadOrOptions),
+        ...options,
+      });
+    }
     return this.sendMessage({
-      QueueUrl: queueUrl,
-      MessageBody: JSON.stringify(payload),
-      ...options,
+      QueueUrl: this.resolveQueueUrl(),
+      MessageBody: JSON.stringify(queueUrlOrPayload),
+      ...(payloadOrOptions as Omit<SendMessageCommandInput, "QueueUrl" | "MessageBody">),
     });
   }
 
-  async receiveMessages(params: ReceiveMessageCommandInput): Promise<ReceiveMessageCommandOutput> {
-    return this.client.send(new ReceiveMessageCommand(params));
+  async receiveMessages(
+    params: SqsInput<ReceiveMessageCommandInput>,
+  ): Promise<ReceiveMessageCommandOutput> {
+    return this.client.send(new ReceiveMessageCommand(this.withQueueUrl(params)));
   }
 
   async receiveJson<T = unknown>(
-    params: ReceiveMessageCommandInput,
+    params: SqsInput<ReceiveMessageCommandInput>,
   ): Promise<Array<{ messageId?: string; body: T }>> {
     const result = await this.receiveMessages(params);
     return (result.Messages ?? []).map((message) => {
@@ -69,20 +109,22 @@ export class SqsService {
     });
   }
 
-  async deleteMessage(params: DeleteMessageCommandInput) {
-    return this.client.send(new DeleteMessageCommand(params));
+  async deleteMessage(params: SqsInput<DeleteMessageCommandInput>) {
+    return this.client.send(new DeleteMessageCommand(this.withQueueUrl(params)));
   }
 
-  async purgeQueue(params: PurgeQueueCommandInput) {
-    return this.client.send(new PurgeQueueCommand(params));
+  async purgeQueue(params: SqsInput<PurgeQueueCommandInput>) {
+    return this.client.send(new PurgeQueueCommand(this.withQueueUrl(params)));
   }
 
-  async sendBatch(params: SendMessageBatchCommandInput): Promise<SendMessageBatchCommandOutput> {
-    return this.client.send(new SendMessageBatchCommand(params));
+  async sendBatch(
+    params: SqsInput<SendMessageBatchCommandInput>,
+  ): Promise<SendMessageBatchCommandOutput> {
+    return this.client.send(new SendMessageBatchCommand(this.withQueueUrl(params)));
   }
 
   async sendJsonBatch(params: {
-    queueUrl: string;
+    queueUrl?: string;
     entries: Array<{
       id?: string;
       body: unknown;
@@ -100,12 +142,38 @@ export class SqsService {
       MessageGroupId: entry.messageGroupId,
       MessageDeduplicationId: entry.messageDeduplicationId,
     }));
-    return this.sendBatch({ QueueUrl: params.queueUrl, Entries: entries });
+    return this.sendBatch({
+      QueueUrl: this.resolveQueueUrl(params.queueUrl),
+      Entries: entries,
+    });
   }
 
   async deleteBatch(
-    params: DeleteMessageBatchCommandInput,
+    params: SqsInput<DeleteMessageBatchCommandInput>,
   ): Promise<DeleteMessageBatchCommandOutput> {
-    return this.client.send(new DeleteMessageBatchCommand(params));
+    return this.client.send(new DeleteMessageBatchCommand(this.withQueueUrl(params)));
+  }
+
+  /**
+   * Receive messages, run the processor, then delete them on success.
+   * If the processor throws, messages are not deleted and will become visible again after visibility timeout.
+   */
+  async processBatch(
+    params: SqsInput<ReceiveMessageCommandInput>,
+    processor: (messages: Message[]) => Promise<void>,
+  ): Promise<void> {
+    const result = await this.receiveMessages(params);
+    const messages = result.Messages ?? [];
+    if (messages.length === 0) return;
+    await processor(messages);
+    const queueUrl = this.resolveQueueUrl(params.QueueUrl);
+    const deleteParams: DeleteMessageBatchCommandInput = {
+      QueueUrl: queueUrl,
+      Entries: messages.map((msg, i) => ({
+        Id: msg.MessageId ?? `msg-${i}`,
+        ReceiptHandle: msg.ReceiptHandle!,
+      })),
+    };
+    await this.client.send(new DeleteMessageBatchCommand(deleteParams));
   }
 }

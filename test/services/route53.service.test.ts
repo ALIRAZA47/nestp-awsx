@@ -80,6 +80,43 @@ describe("Route53Service", () => {
     });
   });
 
+  describe("upsertCnameRecord", () => {
+    it("builds correct ChangeBatch with CNAME type", async () => {
+      sendMock.mockResolvedValue({});
+      await route53Service.upsertCnameRecord({
+        zoneId: "Z123",
+        name: "api.example.com",
+        value: "lb.example.com",
+        ttl: 300,
+      });
+      const call = sendMock.mock.calls[0][0];
+      expect(call.input.ChangeBatch.Changes[0].ResourceRecordSet.Type).toBe("CNAME");
+      expect(call.input.ChangeBatch.Changes[0].ResourceRecordSet.Name).toBe("api.example.com");
+      expect(call.input.ChangeBatch.Changes[0].ResourceRecordSet.ResourceRecords).toEqual([
+        { Value: "lb.example.com" },
+      ]);
+      expect(call.input.ChangeBatch.Changes[0].ResourceRecordSet.TTL).toBe(300);
+    });
+  });
+
+  describe("upsertAaaaRecord", () => {
+    it("builds correct ChangeBatch with AAAA type", async () => {
+      sendMock.mockResolvedValue({});
+      await route53Service.upsertAaaaRecord({
+        zoneId: "Z123",
+        name: "ipv6.example.com",
+        values: ["2001:db8::1", "2001:db8::2"],
+        ttl: 60,
+      });
+      const call = sendMock.mock.calls[0][0];
+      expect(call.input.ChangeBatch.Changes[0].ResourceRecordSet.Type).toBe("AAAA");
+      expect(call.input.ChangeBatch.Changes[0].ResourceRecordSet.ResourceRecords).toEqual([
+        { Value: "2001:db8::1" },
+        { Value: "2001:db8::2" },
+      ]);
+    });
+  });
+
   describe("upsertTxtRecord", () => {
     it("formats TXT values with quotes per Route53 spec", async () => {
       sendMock.mockResolvedValue({});
