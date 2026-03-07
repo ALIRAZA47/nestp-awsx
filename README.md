@@ -102,6 +102,21 @@ AwsxModule.forRoot({
 });
 ```
 
+### Default SQS queue URL
+
+Set `defaultQueueUrl` in SQS service config so you can omit `QueueUrl` when sending, receiving, or deleting messages:
+
+```ts
+AwsxModule.forRoot({
+  services: {
+    [AwsxServiceKey.Sqs]: {
+      defaultQueueUrl: "https://sqs.us-east-1.amazonaws.com/123/my-queue",
+    },
+  },
+});
+// In service: await this.sqs.sendJson({ orderId: 1 });
+```
+
 ### Credential sources
 
 - `default`: AWS default chain (env vars, shared config/credentials files, ECS/EC2 metadata).
@@ -218,6 +233,91 @@ import type { S3Client } from "@aws-sdk/client-s3";
 constructor(@Inject(AwsxToken.S3Client) private readonly client: S3Client) {}
 ```
 
+## Features
+
+### S3 copy and move
+
+```ts
+await awsx.s3.copyObject({ sourceBucket: "src", sourceKey: "a.json", Key: "b.json" });
+await awsx.s3.moveObject({ sourceBucket: "src", sourceKey: "a.json", Key: "b.json" });
+```
+
+### S3 stream download
+
+For large files, use `getObjectStream` to get the raw stream without buffering:
+
+```ts
+const result = await awsx.s3.getObjectStream({ Key: "large.bin" });
+result.Body; // stream
+```
+
+### SES template email
+
+```ts
+await awsx.ses.sendTemplatedEmail({
+  Source: "noreply@example.com",
+  Destination: { ToAddresses: ["user@example.com"] },
+  template: "welcome",
+  templateData: { name: "Alice", loginUrl: "https://app.example.com" },
+});
+```
+
+### SQS process batch
+
+Receive, process, then delete in one call:
+
+```ts
+await awsx.sqs.processBatch(
+  { QueueUrl: "https://sqs.../queue", MaxNumberOfMessages: 10 },
+  async (messages) => {
+    for (const msg of messages) await this.handle(msg);
+  },
+);
+```
+
+### Route53 CNAME and AAAA
+
+```ts
+await awsx.route53.upsertCnameRecord({ zoneId: "Z123", name: "api.example.com", value: "lb.example.com" });
+await awsx.route53.upsertAaaaRecord({ zoneId: "Z123", name: "ipv6.example.com", values: ["2001:db8::1"] });
+```
+
+### Health check (Terminus)
+
+Add `AwsxHealthIndicator` to your module and use with `@nestjs/terminus`:
+
+```ts
+import { AwsxHealthIndicator } from "@nestp/awsx";
+
+@Module({ imports: [AwsxModule.forRoot(...), TerminusModule], providers: [AwsxHealthIndicator] })
+export class AppModule {}
+
+// In controller:
+this.health.check([ () => this.awsxHealth.checkS3("s3", "my-bucket"), () => this.awsxHealth.checkSes("ses") ]);
+```
+
+### SQS consumer service
+
+Poll a queue and run a handler (auto-delete on success):
+
+```ts
+constructor(private readonly consumer: AwsxSqsConsumerService) {}
+onModuleInit() {
+  this.consumer.startConsumer(async (messages) => {
+    for (const msg of messages) await this.process(msg);
+  }, { queueUrl: "https://sqs.../queue" });
+}
+```
+
+### Testing with mocks
+
+Use `AwsxModule.forTesting()` to get a module with mock AWS clients (no real calls):
+
+```ts
+const mod = AwsxModule.forTesting(undefined, { s3: { send: vi.fn().mockResolvedValue({}) } });
+const moduleRef = await Test.createTestingModule({ imports: [mod] }).compile();
+```
+
 ## Extending / Overriding
 
 Override any service by providing the injection token in your module:
@@ -247,6 +347,8 @@ Other commands:
 ```bash
 npx @nestp/awsx install
 npx @nestp/awsx init
+npx @nestp/awsx validate          # validate config file (JSON and shape)
+npx @nestp/awsx validate -c path/to/config.json
 ```
 
 ## Docs App

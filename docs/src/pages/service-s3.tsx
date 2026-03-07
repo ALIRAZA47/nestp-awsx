@@ -28,6 +28,9 @@ export function S3Page() {
         <CardContent className="docs-prose">
           <ul>
             <li>`putJson` and `getJson` reduce JSON serialization/deserialization boilerplate.</li>
+            <li>`getObjectStream` returns the raw response with stream `Body` for large files (no buffering).</li>
+            <li>`copyObject` copies within or across buckets (use `sourceBucket`/`sourceKey` or `CopySource`).</li>
+            <li>`moveObject` copies then deletes the source (same or cross-bucket).</li>
             <li>`getSignedUrl` supports enum-driven operation type (`GetObject` or `PutObject`).</li>
             <li>`putMany` is fail-safe and returns <code>{"{ successes, failures }"}</code> instead of failing whole batch early.</li>
             <li>`uploadWithProgress` uses multipart upload and reports transfer updates through callback.</li>

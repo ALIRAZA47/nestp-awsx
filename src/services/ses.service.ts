@@ -1,8 +1,11 @@
 import { Inject, Injectable } from "@nestjs/common";
 import {
   SendEmailCommand,
+  SendTemplatedEmailCommand,
   type SendEmailCommandInput,
   type SendEmailCommandOutput,
+  type SendTemplatedEmailCommandInput,
+  type SendTemplatedEmailCommandOutput,
   SESClient,
 } from "@aws-sdk/client-ses";
 import { AwsxToken } from "../constants";
@@ -68,5 +71,25 @@ export class SesService {
         },
       },
     });
+  }
+
+  /**
+   * Send an email using an SES template (e.g. welcome, password reset).
+   * TemplateData must be a JSON-serializable object; it is stringified for the API.
+   */
+  async sendTemplatedEmail(
+    params: Omit<SendTemplatedEmailCommandInput, "TemplateData"> & {
+      template: string;
+      templateData: Record<string, unknown>;
+    },
+  ): Promise<SendTemplatedEmailCommandOutput> {
+    const { template, templateData, ...rest } = params;
+    return this.client.send(
+      new SendTemplatedEmailCommand({
+        ...rest,
+        Template: template,
+        TemplateData: JSON.stringify(templateData),
+      }),
+    );
   }
 }

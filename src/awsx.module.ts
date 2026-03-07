@@ -16,6 +16,7 @@ import {
   type AwsxNormalizedConfig,
 } from "./types";
 import { AwsxService } from "./awsx.service";
+import { AwsxSqsConsumerService } from "./consumers/awsx-sqs-consumer.service";
 import { Route53Service } from "./services/route53.service";
 import { S3Service } from "./services/s3.service";
 import { SesService } from "./services/ses.service";
@@ -26,6 +27,49 @@ export class AwsxModule {
   static forRoot(config: AwsxConfig): DynamicModule {
     const normalized = normalizeConfig(config);
     return AwsxModule.buildModule(normalized);
+  }
+
+  /**
+   * Testing module with mock AWS clients (no real AWS calls).
+   * Optionally pass config and/or mock clients per service.
+   * Each mock client should have a `send` method (e.g. `{ send: vi.fn().mockResolvedValue({}) }`).
+   */
+  static forTesting(
+    config?: AwsxConfig,
+    mocks?: {
+      s3?: { send: (cmd: any) => Promise<any> };
+      sqs?: { send: (cmd: any) => Promise<any> };
+      ses?: { send: (cmd: any) => Promise<any> };
+      route53?: { send: (cmd: any) => Promise<any> };
+    },
+  ): DynamicModule {
+    const normalized = normalizeConfig(
+      config ?? {
+        services: {
+          [AwsxServiceKey.S3]: { credentials: { accessKeyId: "AKIA", secretAccessKey: "s" } },
+          [AwsxServiceKey.Sqs]: { credentials: { accessKeyId: "AKIA", secretAccessKey: "s" } },
+          [AwsxServiceKey.Ses]: { credentials: { accessKeyId: "AKIA", secretAccessKey: "s" } },
+          [AwsxServiceKey.Route53]: { credentials: { accessKeyId: "AKIA", secretAccessKey: "s" } },
+        },
+      },
+    );
+    const noop = async () => ({});
+    const s3Client = mocks?.s3 ?? { send: noop };
+    const sqsClient = mocks?.sqs ?? { send: noop };
+    const sesClient = mocks?.ses ?? { send: noop };
+    const route53Client = mocks?.route53 ?? { send: noop };
+    return {
+      module: AwsxModule,
+      providers: [
+        { provide: AwsxToken.Config, useValue: normalized },
+        { provide: AwsxToken.S3Client, useValue: s3Client },
+        { provide: AwsxToken.SqsClient, useValue: sqsClient },
+        { provide: AwsxToken.SesClient, useValue: sesClient },
+        { provide: AwsxToken.Route53Client, useValue: route53Client },
+        ...AwsxModule.createServiceProviders(),
+      ],
+      exports: AwsxModule.exportedProviders(),
+    };
   }
 
   /**
@@ -154,6 +198,7 @@ export class AwsxModule {
         useClass: Route53Service,
       },
       AwsxService,
+      AwsxSqsConsumerService,
     ];
   }
 
@@ -169,6 +214,7 @@ export class AwsxModule {
       AwsxToken.SesService,
       AwsxToken.Route53Service,
       AwsxService,
+      AwsxSqsConsumerService,
     ];
   }
 }

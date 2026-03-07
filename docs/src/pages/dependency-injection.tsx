@@ -21,6 +21,7 @@ export function DependencyInjectionPage() {
             <li>Inject wrappers when you want AWSX helper methods and normalized default behavior.</li>
             <li>Override services via `AwsxToken.*Service` provider bindings inside your own module.</li>
             <li>`AwsxService` facade is useful when one class needs multiple AWS services.</li>
+            <li>For tests, use `AwsxModule.forTesting(config?, mocks?)` to get a module with mock clients and no real AWS calls.</li>
           </ul>
         </CardContent>
       </Card>
@@ -34,6 +35,8 @@ export function DependencyInjectionPage() {
             <li>`AwsxToken.S3Client`, `AwsxToken.SqsClient`, `AwsxToken.SesClient`, `AwsxToken.Route53Client`</li>
             <li>`AwsxToken.S3Service`, `AwsxToken.SqsService`, `AwsxToken.SesService`, `AwsxToken.Route53Service`</li>
             <li>`AwsxToken.Config` for normalized runtime config object access</li>
+            <li>`AwsxSqsConsumerService` for long-poll SQS consumers (inject and call `startConsumer(handler, options?)` in `onModuleInit`)</li>
+            <li>`AwsxHealthIndicator` for health checks with Terminus (add as provider; use `checkS3`, `checkSqs`, `checkSes` in your health controller)</li>
           </ul>
         </CardContent>
       </Card>

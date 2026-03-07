@@ -54,6 +54,54 @@ export class Route53Service {
     });
   }
 
+  async upsertCnameRecord(params: {
+    zoneId: string;
+    name: string;
+    value: string;
+    ttl?: number;
+  }): Promise<ChangeResourceRecordSetsCommandOutput> {
+    return this.changeRecordSets({
+      HostedZoneId: params.zoneId,
+      ChangeBatch: {
+        Changes: [
+          {
+            Action: AwsxRoute53ChangeAction.Upsert,
+            ResourceRecordSet: {
+              Name: params.name,
+              Type: AwsxRoute53RecordType.Cname,
+              TTL: params.ttl ?? 300,
+              ResourceRecords: [{ Value: params.value }],
+            },
+          },
+        ],
+      },
+    });
+  }
+
+  async upsertAaaaRecord(params: {
+    zoneId: string;
+    name: string;
+    values: string[];
+    ttl?: number;
+  }): Promise<ChangeResourceRecordSetsCommandOutput> {
+    return this.changeRecordSets({
+      HostedZoneId: params.zoneId,
+      ChangeBatch: {
+        Changes: [
+          {
+            Action: AwsxRoute53ChangeAction.Upsert,
+            ResourceRecordSet: {
+              Name: params.name,
+              Type: AwsxRoute53RecordType.Aaaa,
+              TTL: params.ttl ?? 60,
+              ResourceRecords: params.values.map((value) => ({ Value: value })),
+            },
+          },
+        ],
+      },
+    });
+  }
+
   async upsertTxtRecord(params: {
     zoneId: string;
     name: string;

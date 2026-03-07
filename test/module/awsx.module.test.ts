@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { Test } from "@nestjs/testing";
 import { AwsxModule } from "../../src/awsx.module";
 import { AwsxToken } from "../../src/constants";
@@ -185,6 +185,25 @@ describe("AwsxModule", () => {
         const { rmSync } = await import("fs");
         rmSync(tmpDir, { recursive: true });
       }
+    });
+  });
+
+  describe("forTesting", () => {
+    it("creates module with mock clients", async () => {
+      const mod = AwsxModule.forTesting();
+      const moduleRef = await Test.createTestingModule({ imports: [mod] }).compile();
+      const awsx = moduleRef.get(AwsxService);
+      expect(awsx).toBeDefined();
+      expect(awsx.s3).toBeDefined();
+    });
+
+    it("accepts custom mocks", async () => {
+      const sendMock = vi.fn().mockResolvedValue({});
+      const mod = AwsxModule.forTesting(undefined, { s3: { send: sendMock } });
+      const moduleRef = await Test.createTestingModule({ imports: [mod] }).compile();
+      const awsx = moduleRef.get(AwsxService);
+      await awsx.s3.putObject({ Bucket: "b", Key: "x", Body: "y" });
+      expect(sendMock).toHaveBeenCalled();
     });
   });
 });

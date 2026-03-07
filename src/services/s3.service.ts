@@ -1,11 +1,14 @@
 import { Inject, Injectable } from "@nestjs/common";
 import {
+  CopyObjectCommand,
   DeleteObjectCommand,
   DeleteObjectsCommand,
   GetObjectCommand,
   HeadObjectCommand,
   ListObjectsV2Command,
   PutObjectCommand,
+  type CopyObjectCommandInput,
+  type CopyObjectCommandOutput,
   type DeleteObjectsCommandInput,
   type DeleteObjectsCommandOutput,
   type DeleteObjectCommandInput,
@@ -64,8 +67,81 @@ export class S3Service {
     return { ...result, body };
   }
 
+  /**
+   * Get an object as a stream (no buffering). Use for large files to avoid high memory use.
+   * Response Body is the raw stream from the SDK.
+   */
+  async getObjectStream(
+    params: S3Input<GetObjectCommandInput>,
+  ): Promise<GetObjectCommandOutput> {
+    return this.client.send(new GetObjectCommand(this.withBucket(params)));
+  }
+
   async deleteObject(params: S3Input<DeleteObjectCommandInput>) {
     return this.client.send(new DeleteObjectCommand(this.withBucket(params)));
+  }
+
+  /**
+   * Copy an object within S3 (same or cross-bucket).
+   * Use sourceBucket + sourceKey for convenience, or pass CopySource directly (e.g. "bucket/key").
+   */
+  async copyObject(
+    params: S3Input<CopyObjectCommandInput> & {
+      CopySource: string;
+    },
+  ): Promise<CopyObjectCommandOutput>;
+  async copyObject(params: S3Input<Omit<CopyObjectCommandInput, "CopySource">> & {
+    sourceBucket: string;
+    sourceKey: string;
+    sourceVersionId?: string;
+    Key: string;
+  }): Promise<CopyObjectCommandOutput>;
+  async copyObject(
+    params: (S3Input<CopyObjectCommandInput> & { CopySource?: string }) & {
+      sourceBucket?: string;
+      sourceKey?: string;
+      sourceVersionId?: string;
+      Key?: string;
+    },
+  ): Promise<CopyObjectCommandOutput> {
+    let CopySource: string;
+    if (params.CopySource) {
+      CopySource = params.CopySource;
+    } else if (params.sourceBucket != null && params.sourceKey != null) {
+      const encoded = encodeURIComponent(params.sourceKey);
+      CopySource = params.sourceVersionId
+        ? `${params.sourceBucket}/${encoded}?versionId=${params.sourceVersionId}`
+        : `${params.sourceBucket}/${encoded}`;
+    } else {
+      throw new Error("[awsx] copyObject requires CopySource or (sourceBucket + sourceKey).");
+    }
+    const { sourceBucket, sourceKey, sourceVersionId, ...rest } = params as any;
+    return this.client.send(
+      new CopyObjectCommand(this.withBucket({ ...rest, CopySource })),
+    );
+  }
+
+  /**
+   * Copy an object then delete the source (move). Same or cross-bucket.
+   * Requires sourceBucket + sourceKey so the source can be deleted after copy.
+   */
+  async moveObject(
+    params: S3Input<Omit<CopyObjectCommandInput, "CopySource">> & {
+      sourceBucket: string;
+      sourceKey: string;
+      sourceVersionId?: string;
+      Key: string;
+    },
+  ): Promise<CopyObjectCommandOutput> {
+    const result = await this.copyObject(params);
+    await this.client.send(
+      new DeleteObjectCommand({
+        Bucket: params.sourceBucket,
+        Key: params.sourceKey,
+        VersionId: params.sourceVersionId,
+      }),
+    );
+    return result;
   }
 
   async listObjects(

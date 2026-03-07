@@ -19,7 +19,7 @@ export function ConfigurationPage() {
         <CardContent className="space-y-4 text-sm leading-7 text-muted-foreground">
           <p><span className="font-semibold text-foreground">`defaults`</span> handles shared behavior such as region, max attempts, and optional global logger.</p>
           <p><span className="font-semibold text-foreground">`global`</span> defines global credentials fallback for all services.</p>
-          <p><span className="font-semibold text-foreground">`services`</span> allows per-service region, endpoint, credentials and S3 `defaultBucket`.</p>
+          <p><span className="font-semibold text-foreground">`services`</span> allows per-service region, endpoint, credentials, S3 `defaultBucket`, and SQS `defaultQueueUrl`.</p>
           <Separator />
           <p>Use enum keys (`AwsxServiceKey`, `AwsxCredentialSource`) instead of magic strings while building config objects.</p>
           <p>Use `forRoot` for static config and `forRootAsync` when values come from environment config, secrets manager, or runtime providers.</p>
@@ -35,6 +35,7 @@ export function ConfigurationPage() {
             <li>Service credentials override global credentials for only that service.</li>
             <li>Service region overrides global/default region for only that service.</li>
             <li>S3 `defaultBucket` is used whenever a bucket is required and not passed at call-time.</li>
+            <li>SQS `defaultQueueUrl` is used whenever a queue URL is required and not passed at call-time.</li>
             <li>Client config values from `services[*].client` merge with normalized defaults.</li>
           </ul>
         </CardContent>

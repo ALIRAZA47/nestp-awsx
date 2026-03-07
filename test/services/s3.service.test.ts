@@ -80,6 +80,21 @@ describe("S3Service", () => {
     });
   });
 
+  describe("getObjectStream", () => {
+    it("returns raw response with stream Body", async () => {
+      const stream = { on: vi.fn(), pipe: vi.fn() };
+      sendMock.mockResolvedValue({ Body: stream, ContentLength: 5 });
+      const result = await s3Service.getObjectStream({ Key: "large.bin" });
+      expect(result.Body).toBe(stream);
+      expect(result.ContentLength).toBe(5);
+      expect(sendMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          input: expect.objectContaining({ Bucket: "test-bucket", Key: "large.bin" }),
+        }),
+      );
+    });
+  });
+
   describe("resolveBucket", () => {
     it("throws when no bucket and no defaultBucket", async () => {
       const serviceNoBucket = createService({ defaultBucket: undefined });
@@ -181,6 +196,48 @@ describe("S3Service", () => {
         input: { Key: "file.txt" },
       });
       expect(url).toBe("https://signed-url.example.com");
+    });
+  });
+
+  describe("copyObject", () => {
+    it("copies object using sourceBucket and sourceKey", async () => {
+      sendMock.mockResolvedValue({ CopyObjectResult: {} });
+      await s3Service.copyObject({
+        sourceBucket: "other-bucket",
+        sourceKey: "src/key",
+        Key: "dest/key",
+      });
+      const call = sendMock.mock.calls[0][0];
+      expect(call.input.Bucket).toBe("test-bucket");
+      expect(call.input.Key).toBe("dest/key");
+      expect(call.input.CopySource).toBe("other-bucket/src%2Fkey");
+    });
+
+    it("copies using explicit CopySource", async () => {
+      sendMock.mockResolvedValue({ CopyObjectResult: {} });
+      await s3Service.copyObject({
+        CopySource: "my-bucket/my-key",
+        Key: "new-key",
+      });
+      expect(sendMock.mock.calls[0][0].input.CopySource).toBe("my-bucket/my-key");
+      expect(sendMock.mock.calls[0][0].input.Key).toBe("new-key");
+    });
+  });
+
+  describe("moveObject", () => {
+    it("copies then deletes source", async () => {
+      sendMock.mockResolvedValueOnce({ CopyObjectResult: {} }).mockResolvedValueOnce({});
+      await s3Service.moveObject({
+        sourceBucket: "src-bucket",
+        sourceKey: "src/key",
+        Key: "dest/key",
+      });
+      expect(sendMock).toHaveBeenCalledTimes(2);
+      expect(sendMock.mock.calls[0][0].input.Key).toBe("dest/key");
+      expect(sendMock.mock.calls[1][0].input).toMatchObject({
+        Bucket: "src-bucket",
+        Key: "src/key",
+      });
     });
   });
 

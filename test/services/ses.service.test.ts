@@ -87,4 +87,23 @@ describe("SesService", () => {
       expect(call.input.Message.Body.Text.Data).toBe("Hi");
     });
   });
+
+  describe("sendTemplatedEmail", () => {
+    it("sends with template name and stringified templateData", async () => {
+      sendMock.mockResolvedValue({ MessageId: "tpl-1" });
+      const result = await sesService.sendTemplatedEmail({
+        Source: "noreply@example.com",
+        Destination: { ToAddresses: ["user@example.com"] },
+        template: "welcome",
+        templateData: { name: "Alice", loginUrl: "https://app.example.com" },
+      });
+      expect(result.MessageId).toBe("tpl-1");
+      const call = sendMock.mock.calls[0][0];
+      expect(call.input.Template).toBe("welcome");
+      expect(call.input.TemplateData).toBe(
+        '{"name":"Alice","loginUrl":"https://app.example.com"}',
+      );
+      expect(call.input.Source).toBe("noreply@example.com");
+    });
+  });
 });

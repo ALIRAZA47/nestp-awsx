@@ -291,6 +291,35 @@ const setupFlow = async () => {
   console.log(pc.green("Setup complete."));
 };
 
+const validateFlow = async (configPath: string) => {
+  logHeader("awsx validate");
+  const resolved = join(process.cwd(), configPath);
+  if (!existsSync(resolved)) {
+    console.error(pc.red(`Config file not found: ${configPath}`));
+    process.exit(1);
+  }
+  let config: AwsxConfig;
+  try {
+    const raw = readFileSync(resolved, "utf-8");
+    config = JSON.parse(raw) as AwsxConfig;
+  } catch (err: any) {
+    console.error(pc.red("Invalid JSON: " + (err?.message ?? String(err))));
+    process.exit(1);
+  }
+  if (config && typeof config !== "object") {
+    console.error(pc.red("Config must be a JSON object."));
+    process.exit(1);
+  }
+  const hasDefaults = config.defaults === undefined || typeof config.defaults === "object";
+  const hasGlobal = config.global === undefined || typeof config.global === "object";
+  const hasServices = config.services === undefined || typeof config.services === "object";
+  if (!hasDefaults || !hasGlobal || !hasServices) {
+    console.error(pc.red("Config must have optional defaults, global, and services (all objects)."));
+    process.exit(1);
+  }
+  console.log(pc.green(`Config at ${configPath} is valid.`));
+};
+
 const getVersion = (): string => {
   try {
     const pkgPath = join(__dirname, "..", "..", "package.json");
@@ -333,6 +362,17 @@ program
   .description(`Install ${PACKAGE_NAME} and generate config`)
   .action(() => {
     setupFlow().catch((error) => {
+      console.error(pc.red(error.message));
+      process.exit(1);
+    });
+  });
+
+program
+  .command("validate")
+  .description("Validate awsx.config.json (file exists, valid JSON, and expected shape)")
+  .option("-c, --config <path>", "Config file path", DEFAULT_CONFIG_PATH)
+  .action((opts: { config?: string }) => {
+    validateFlow(opts.config ?? DEFAULT_CONFIG_PATH).catch((error) => {
       console.error(pc.red(error.message));
       process.exit(1);
     });

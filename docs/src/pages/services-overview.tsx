@@ -29,10 +29,11 @@ export function ServicesOverviewPage() {
         </CardHeader>
         <CardContent className="docs-prose">
           <ul>
-            <li>`S3Service`: JSON helpers, signed URLs, failsafe bulk upload, upload progress tracking.</li>
-            <li>`SqsService`: JSON message helpers and batch send/delete helpers.</li>
-            <li>`SesService`: text and HTML send shortcuts.</li>
-            <li>`Route53Service`: A and TXT upsert helpers.</li>
+            <li>`S3Service`: JSON helpers, stream download, copy/move, signed URLs, failsafe bulk upload, upload progress tracking.</li>
+            <li>`SqsService`: default queue URL, JSON helpers, batch send/delete, `processBatch`, and `AwsxSqsConsumerService` for long-poll consumers.</li>
+            <li>`SesService`: text, HTML, and templated-email send shortcuts.</li>
+            <li>`Route53Service`: A, CNAME, AAAA, and TXT upsert helpers.</li>
+            <li>`AwsxHealthIndicator`: optional health checks for S3/SQS/SES (e.g. with Terminus).</li>
           </ul>
         </CardContent>
       </Card>
