@@ -11,6 +11,7 @@ describe("normalizeConfig", () => {
     expect(result.services).toHaveProperty(AwsxServiceKey.Sqs);
     expect(result.services).toHaveProperty(AwsxServiceKey.Ses);
     expect(result.services).toHaveProperty(AwsxServiceKey.Route53);
+    expect(result.services).toHaveProperty(AwsxServiceKey.EventBridge);
   });
 
   it("merges global credentials into each service", () => {

@@ -23,6 +23,9 @@ describe("AwsxModule", () => {
       [AwsxServiceKey.Route53]: {
         credentials: { accessKeyId: "AKIA", secretAccessKey: "secret" },
       },
+      [AwsxServiceKey.EventBridge]: {
+        credentials: { accessKeyId: "AKIA", secretAccessKey: "secret" },
+      },
     },
   };
 
@@ -49,6 +52,7 @@ describe("AwsxModule", () => {
       expect(mod.exports).toContain(AwsxToken.SqsService);
       expect(mod.exports).toContain(AwsxToken.SesService);
       expect(mod.exports).toContain(AwsxToken.Route53Service);
+      expect(mod.exports).toContain(AwsxToken.EventBridgeService);
       expect(mod.exports).toContain(AwsxService);
     });
 
@@ -62,6 +66,7 @@ describe("AwsxModule", () => {
       expect(awsx.sqs).toBeDefined();
       expect(awsx.ses).toBeDefined();
       expect(awsx.route53).toBeDefined();
+      expect(awsx.eventBridge).toBeDefined();
     });
   });
 
@@ -170,6 +175,7 @@ describe("AwsxModule", () => {
             sqs: { credentials: { accessKeyId: "AKIA", secretAccessKey: "s" } },
             ses: { credentials: { accessKeyId: "AKIA", secretAccessKey: "s" } },
             route53: { credentials: { accessKeyId: "AKIA", secretAccessKey: "s" } },
+            eventbridge: { credentials: { accessKeyId: "AKIA", secretAccessKey: "s" } },
           },
         }),
       );

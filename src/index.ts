@@ -12,6 +12,7 @@ export { AwsxConsoleLogger } from "./logger";
 export { S3Service } from "./services/s3.service";
 export { SqsService } from "./services/sqs.service";
 export { SesService } from "./services/ses.service";
+export { EventBridgeService } from "./services/eventbridge.service";
 export { Route53Service } from "./services/route53.service";
 export { AwsxHealthIndicator } from "./health/awsx-health.indicator";
 export { AwsxSqsConsumerService } from "./consumers/awsx-sqs-consumer.service";

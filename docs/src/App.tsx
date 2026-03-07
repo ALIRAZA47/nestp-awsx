@@ -8,6 +8,7 @@ import { DependencyInjectionPage } from "@/pages/dependency-injection";
 import { ExamplesPage } from "@/pages/examples";
 import { InstallationPage } from "@/pages/installation";
 import { IntroductionPage } from "@/pages/introduction";
+import { EventBridgePage } from "@/pages/service-eventbridge";
 import { Route53Page } from "@/pages/service-route53";
 import { S3Page } from "@/pages/service-s3";
 import { SesPage } from "@/pages/service-ses";
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="/services/sqs" element={<SqsPage />} />
         <Route path="/services/ses" element={<SesPage />} />
         <Route path="/services/route53" element={<Route53Page />} />
+        <Route path="/services/eventbridge" element={<EventBridgePage />} />
         <Route path="/cli" element={<CliPage />} />
         <Route path="/examples" element={<ExamplesPage />} />
         <Route path="/api-reference" element={<ApiReferencePage />} />

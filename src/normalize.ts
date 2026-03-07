@@ -75,6 +75,11 @@ export const normalizeConfig = (config: AwsxConfig): AwsxNormalizedConfig => {
         globalCredentials,
         defaults,
       ),
+      [AwsxServiceKey.EventBridge]: normalizeServiceConfig(
+        services[AwsxServiceKey.EventBridge],
+        globalCredentials,
+        defaults,
+      ),
     },
   };
 };

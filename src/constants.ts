@@ -4,8 +4,10 @@ export enum AwsxToken {
   SqsClient = "AWSX_SQS_CLIENT",
   SesClient = "AWSX_SES_CLIENT",
   Route53Client = "AWSX_ROUTE53_CLIENT",
+  EventBridgeClient = "AWSX_EVENTBRIDGE_CLIENT",
   S3Service = "AWSX_S3_SERVICE",
   SqsService = "AWSX_SQS_SERVICE",
   SesService = "AWSX_SES_SERVICE",
   Route53Service = "AWSX_ROUTE53_SERVICE",
+  EventBridgeService = "AWSX_EVENTBRIDGE_SERVICE",
 }

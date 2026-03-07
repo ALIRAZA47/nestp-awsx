@@ -32,8 +32,8 @@ export function DependencyInjectionPage() {
         </CardHeader>
         <CardContent className="docs-prose">
           <ul>
-            <li>`AwsxToken.S3Client`, `AwsxToken.SqsClient`, `AwsxToken.SesClient`, `AwsxToken.Route53Client`</li>
-            <li>`AwsxToken.S3Service`, `AwsxToken.SqsService`, `AwsxToken.SesService`, `AwsxToken.Route53Service`</li>
+            <li>`AwsxToken.S3Client`, `AwsxToken.SqsClient`, `AwsxToken.SesClient`, `AwsxToken.Route53Client`, `AwsxToken.EventBridgeClient`</li>
+            <li>`AwsxToken.S3Service`, `AwsxToken.SqsService`, `AwsxToken.SesService`, `AwsxToken.Route53Service`, `AwsxToken.EventBridgeService`</li>
             <li>`AwsxToken.Config` for normalized runtime config object access</li>
             <li>`AwsxSqsConsumerService` for long-poll SQS consumers (inject and call `startConsumer(handler, options?)` in `onModuleInit`)</li>
             <li>`AwsxHealthIndicator` for health checks with Terminus (add as provider; use `checkS3`, `checkSqs`, `checkSes` in your health controller)</li>
