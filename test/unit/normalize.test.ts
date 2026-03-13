@@ -117,7 +117,7 @@ describe("normalizeConfig", () => {
     expect(result.services[AwsxServiceKey.S3].endpoint).toBe("http://localhost:4566");
   });
 
-  it("all four services get normalized", () => {
+  it("all services get normalized", () => {
     const config = {
       defaults: { region: "us-east-1" },
     };
@@ -127,6 +127,7 @@ describe("normalizeConfig", () => {
       AwsxServiceKey.Sqs,
       AwsxServiceKey.Ses,
       AwsxServiceKey.Route53,
+      AwsxServiceKey.EventBridge,
     ]) {
       expect(result.services[key]).toHaveProperty("region");
       expect(result.services[key]).toHaveProperty("client");

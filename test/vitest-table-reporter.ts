@@ -123,11 +123,11 @@ function printTable(rows: Row[], totalDuration: number): void {
   console.log(sep + "\n");
 }
 
-const TableSummaryReporter: Reporter = {
-  ctx: null as VitestContext | null,
+const TableSummaryReporter: Reporter & { ctx: VitestContext | null } = {
+  ctx: null,
 
-  onInit(ctx: VitestContext) {
-    this.ctx = ctx;
+  onInit(ctx: unknown) {
+    this.ctx = ctx as VitestContext;
   },
 
   onFinished(files: unknown[]) {

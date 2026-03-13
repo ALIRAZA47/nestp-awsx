@@ -53,18 +53,18 @@ describe("EventBridgeService", () => {
       expect(result.Entries).toHaveLength(2);
     });
 
-    it("returns full response including FailedEntryCount and FailedEntries", async () => {
+    it("returns full response including FailedEntryCount and error info on Entries", async () => {
       sendMock.mockResolvedValue({
-        Entries: [{ EventId: "ok-1" }],
+        Entries: [{ ErrorCode: "InternalException", ErrorMessage: "Bad" }],
         FailedEntryCount: 1,
-        FailedEntries: [{ ErrorCode: "InternalException", ErrorMessage: "Bad" }],
       });
       const result = await service.putEvents({
         Entries: [{ Source: "x", DetailType: "T", Detail: "{}" }],
       });
       expect(result.FailedEntryCount).toBe(1);
-      expect(result.FailedEntries).toHaveLength(1);
-      expect(result.FailedEntries![0].ErrorCode).toBe("InternalException");
+      expect(result.Entries).toHaveLength(1);
+      expect(result.Entries![0].ErrorCode).toBe("InternalException");
+      expect(result.Entries![0].ErrorMessage).toBe("Bad");
     });
 
     it("passes EventBusName on entries when provided", async () => {
@@ -103,12 +103,13 @@ describe("EventBridgeService", () => {
 
     it("sends single event with string detail as-is", async () => {
       sendMock.mockResolvedValue({});
+      const detail = '{"msg":"plain text"}';
       await service.putEvent({
         Source: "legacy",
         DetailType: "Raw",
-        Detail: "plain text",
+        Detail: detail,
       });
-      expect(cmdInput().Entries[0].Detail).toBe("plain text");
+      expect(cmdInput().Entries[0].Detail).toBe(detail);
     });
 
     it("stringifies empty object detail as '{}'", async () => {

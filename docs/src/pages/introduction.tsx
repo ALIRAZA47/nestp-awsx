@@ -31,7 +31,7 @@ export function IntroductionPage() {
         <CardContent className="docs-prose">
           <ul>
             <li>`AwsxModule` owns configuration normalization and provider wiring.</li>
-            <li>`AwsxService` is a facade that exposes `s3`, `sqs`, `ses`, and `route53` services.</li>
+            <li>`AwsxService` is a facade that exposes `s3`, `sqs`, `ses`, `route53`, and `eventBridge` services.</li>
             <li>`AwsxToken` exports DI-safe tokens so you can inject or override any service/client.</li>
             <li>Per-service config can override region/credentials while still inheriting global defaults.</li>
           </ul>

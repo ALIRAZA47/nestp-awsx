@@ -33,7 +33,7 @@ export function ServicesOverviewPage() {
             <li>`SqsService`: default queue URL, JSON helpers, batch send/delete, `processBatch`, and `AwsxSqsConsumerService` for long-poll consumers.</li>
             <li>`SesService`: text, HTML, and templated-email send shortcuts.</li>
             <li>`Route53Service`: A, CNAME, AAAA, and TXT upsert helpers.</li>
-            <li>`EventBridgeService`: put events, putRule, putTargets.</li>
+            <li>`EventBridgeService`: putEvents, putEvent, putRule, putTargets.</li>
             <li>`AwsxHealthIndicator`: optional health checks for S3, SQS, SES, and EventBridge (e.g. with Terminus).</li>
           </ul>
         </CardContent>

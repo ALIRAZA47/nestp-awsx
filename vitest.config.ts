@@ -1,5 +1,5 @@
 import { defineConfig } from "vitest/config";
-import TableSummaryReporter from "./test/vitest-table-reporter.ts";
+import TableSummaryReporter from "./test/vitest-table-reporter";
 
 export default defineConfig({
   test: {
