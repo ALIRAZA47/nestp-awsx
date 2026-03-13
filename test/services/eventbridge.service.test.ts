@@ -13,6 +13,8 @@ describe("EventBridgeService", () => {
     } as any);
   });
 
+  const cmdInput = () => sendMock.mock.calls[0][0].input;
+
   describe("putEvents", () => {
     it("sends PutEventsCommand with given input", async () => {
       sendMock.mockResolvedValue({ Entries: [{ EventId: "evt-1" }], FailedEntryCount: 0 });
@@ -81,10 +83,6 @@ describe("EventBridgeService", () => {
       });
       expect(cmdInput().Entries[0].EventBusName).toBe("custom-bus");
     });
-
-    function cmdInput() {
-      return sendMock.mock.calls[0][0].input;
-    }
   });
 
   describe("putEvent", () => {
@@ -124,47 +122,55 @@ describe("EventBridgeService", () => {
 
     it("passes optional EventBusName to entry", async () => {
       sendMock.mockResolvedValue({});
+      const detail = '{"v":"x"}';
       await service.putEvent({
         Source: "s",
         DetailType: "T",
-        Detail: "x",
+        Detail: detail,
         EventBusName: "my-custom-bus",
       });
       expect(cmdInput().Entries[0].EventBusName).toBe("my-custom-bus");
+      expect(cmdInput().Entries[0].Detail).toBe(detail);
     });
 
     it("passes optional Time to entry", async () => {
       sendMock.mockResolvedValue({});
       const time = new Date("2025-01-15T12:00:00Z");
+      const detail = '{"v":"x"}';
       await service.putEvent({
         Source: "s",
         DetailType: "T",
-        Detail: "x",
+        Detail: detail,
         Time: time,
       });
       expect(cmdInput().Entries[0].Time).toBe(time);
+      expect(cmdInput().Entries[0].Detail).toBe(detail);
     });
 
     it("passes optional Resources to entry", async () => {
       sendMock.mockResolvedValue({});
+      const detail = '{"v":"x"}';
       await service.putEvent({
         Source: "s",
         DetailType: "T",
-        Detail: "x",
+        Detail: detail,
         Resources: ["arn:aws:resource:123"],
       });
       expect(cmdInput().Entries[0].Resources).toEqual(["arn:aws:resource:123"]);
+      expect(cmdInput().Entries[0].Detail).toBe(detail);
     });
 
     it("passes optional TraceHeader to entry", async () => {
       sendMock.mockResolvedValue({});
+      const detail = '{"v":"x"}';
       await service.putEvent({
         Source: "s",
         DetailType: "T",
-        Detail: "x",
+        Detail: detail,
         TraceHeader: "trace-id-123",
       });
       expect(cmdInput().Entries[0].TraceHeader).toBe("trace-id-123");
+      expect(cmdInput().Entries[0].Detail).toBe(detail);
     });
 
     it("returns putEvents response", async () => {
@@ -172,26 +178,26 @@ describe("EventBridgeService", () => {
         Entries: [{ EventId: "e-1" }],
         FailedEntryCount: 0,
       });
+      const detail = '{"v":"x"}';
       const result = await service.putEvent({
         Source: "s",
         DetailType: "T",
-        Detail: "x",
+        Detail: detail,
       });
       expect(result.Entries).toHaveLength(1);
       expect(result.Entries![0].EventId).toBe("e-1");
       expect(result.FailedEntryCount).toBe(0);
+      expect(cmdInput().Entries[0].Detail).toBe(detail);
     });
 
     it("calls putEvents once with single entry", async () => {
       sendMock.mockResolvedValue({});
-      await service.putEvent({ Source: "s", DetailType: "T", Detail: "d" });
+      const detail = '{"v":"d"}';
+      await service.putEvent({ Source: "s", DetailType: "T", Detail: detail });
       expect(sendMock).toHaveBeenCalledTimes(1);
       expect(cmdInput().Entries).toHaveLength(1);
+      expect(cmdInput().Entries[0].Detail).toBe(detail);
     });
-
-    function cmdInput() {
-      return sendMock.mock.calls[0][0].input;
-    }
   });
 
   describe("putRule", () => {
@@ -251,10 +257,6 @@ describe("EventBridgeService", () => {
       });
       expect(result.RuleArn).toBe("arn:aws:events:us-west-2:456:rule/scheduled");
     });
-
-    function cmdInput() {
-      return sendMock.mock.calls[0][0].input;
-    }
   });
 
   describe("putTargets", () => {
@@ -328,9 +330,5 @@ describe("EventBridgeService", () => {
       expect(cmdInput().Rule).toBe("scheduled-rule");
       expect(cmdInput().Targets[0].RoleArn).toBe("arn:aws:iam::999:role/EventsInvoke");
     });
-
-    function cmdInput() {
-      return sendMock.mock.calls[0][0].input;
-    }
   });
 });
