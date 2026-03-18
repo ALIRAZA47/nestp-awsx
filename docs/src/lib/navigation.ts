@@ -13,6 +13,7 @@ import {
   Settings2,
   TerminalSquare,
   Wrench,
+  Zap,
 } from "lucide-react";
 
 export type NavItem = {
@@ -50,6 +51,7 @@ export const docsNavigation: NavSection[] = [
       { title: "SQS", href: "/services/sqs", icon: MessageSquare },
       { title: "SES", href: "/services/ses", icon: Mail },
       { title: "Route53", href: "/services/route53", icon: Route },
+      { title: "EventBridge", href: "/services/eventbridge", icon: Zap },
     ],
   },
   {

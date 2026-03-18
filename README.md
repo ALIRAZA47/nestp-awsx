@@ -1,6 +1,6 @@
 # @nestp/awsx
 
-A one-stop NestJS module for AWS integrations with S3, SQS, SES, and Route53 with one client per service. Includes a CLI to scaffold config and install the package.
+A one-stop NestJS module for AWS integrations with S3, SQS, SES, Route53, and EventBridge with one client per service. Includes a CLI to scaffold config and install the package.
 
 ## Install
 
@@ -282,9 +282,24 @@ await awsx.route53.upsertCnameRecord({ zoneId: "Z123", name: "api.example.com", 
 await awsx.route53.upsertAaaaRecord({ zoneId: "Z123", name: "ipv6.example.com", values: ["2001:db8::1"] });
 ```
 
+### EventBridge
+
+Send events to the default or custom event bus; optional helpers for rules and targets:
+
+```ts
+await awsx.eventBridge.putEvent({
+  Source: "my.app",
+  DetailType: "OrderCreated",
+  Detail: { orderId: "123", total: 99.99 },
+});
+await awsx.eventBridge.putEvents({ Entries: [...] });
+await awsx.eventBridge.putRule({ Name: "daily", ScheduleExpression: "rate(1 day)" });
+await awsx.eventBridge.putTargets({ Rule: "daily", Targets: [...] });
+```
+
 ### Health check (Terminus)
 
-Add `AwsxHealthIndicator` to your module and use with `@nestjs/terminus`:
+Add `AwsxHealthIndicator` to your module and use with `@nestjs/terminus` for S3, SQS, SES, and EventBridge:
 
 ```ts
 import { AwsxHealthIndicator } from "@nestp/awsx";
@@ -293,7 +308,11 @@ import { AwsxHealthIndicator } from "@nestp/awsx";
 export class AppModule {}
 
 // In controller:
-this.health.check([ () => this.awsxHealth.checkS3("s3", "my-bucket"), () => this.awsxHealth.checkSes("ses") ]);
+this.health.check([
+  () => this.awsxHealth.checkS3("s3", "my-bucket"),
+  () => this.awsxHealth.checkSes("ses"),
+  () => this.awsxHealth.checkEventBridge("eventbridge"),
+]);
 ```
 
 ### SQS consumer service

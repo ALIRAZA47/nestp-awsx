@@ -200,6 +200,7 @@ const initFlow = async (withHeader = true) => {
       { title: "SQS", value: AwsxServiceKey.Sqs },
       { title: "SES", value: AwsxServiceKey.Ses },
       { title: "Route53", value: AwsxServiceKey.Route53 },
+      { title: "EventBridge", value: AwsxServiceKey.EventBridge },
     ],
     min: 0,
   });
@@ -218,7 +219,13 @@ const initFlow = async (withHeader = true) => {
 
   const selectedServices = services?.length
     ? services
-    : [AwsxServiceKey.S3, AwsxServiceKey.Sqs, AwsxServiceKey.Ses, AwsxServiceKey.Route53];
+    : [
+        AwsxServiceKey.S3,
+        AwsxServiceKey.Sqs,
+        AwsxServiceKey.Ses,
+        AwsxServiceKey.Route53,
+        AwsxServiceKey.EventBridge,
+      ];
 
   const serviceConfigs: Partial<Record<AwsxServiceKey, ServiceConfig>> = {};
   for (const service of selectedServices) {

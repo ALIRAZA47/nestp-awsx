@@ -11,6 +11,7 @@ describe("AwsxToken", () => {
     expect(AwsxToken.SqsClient).toBe("AWSX_SQS_CLIENT");
     expect(AwsxToken.SesClient).toBe("AWSX_SES_CLIENT");
     expect(AwsxToken.Route53Client).toBe("AWSX_ROUTE53_CLIENT");
+    expect(AwsxToken.EventBridgeClient).toBe("AWSX_EVENTBRIDGE_CLIENT");
   });
 
   it("has all service tokens", () => {
@@ -18,5 +19,6 @@ describe("AwsxToken", () => {
     expect(AwsxToken.SqsService).toBe("AWSX_SQS_SERVICE");
     expect(AwsxToken.SesService).toBe("AWSX_SES_SERVICE");
     expect(AwsxToken.Route53Service).toBe("AWSX_ROUTE53_SERVICE");
+    expect(AwsxToken.EventBridgeService).toBe("AWSX_EVENTBRIDGE_SERVICE");
   });
 });

@@ -1,7 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
-import {
-  AwsxToken,
-} from "./constants";
+import { AwsxToken } from "./constants";
+import { EventBridgeService } from "./services/eventbridge.service";
 import { Route53Service } from "./services/route53.service";
 import { S3Service } from "./services/s3.service";
 import { SesService } from "./services/ses.service";
@@ -18,5 +17,7 @@ export class AwsxService {
     public readonly ses: SesService,
     @Inject(AwsxToken.Route53Service)
     public readonly route53: Route53Service,
+    @Inject(AwsxToken.EventBridgeService)
+    public readonly eventBridge: EventBridgeService,
   ) {}
 }

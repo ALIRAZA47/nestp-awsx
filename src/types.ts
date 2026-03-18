@@ -6,6 +6,7 @@ export enum AwsxServiceKey {
   Sqs = "sqs",
   Ses = "ses",
   Route53 = "route53",
+  EventBridge = "eventbridge",
 }
 
 export enum AwsxCredentialSource {
@@ -65,6 +66,7 @@ export type AwsxConfig = {
     [AwsxServiceKey.Sqs]?: AwsxServiceConfig;
     [AwsxServiceKey.Ses]?: AwsxServiceConfig;
     [AwsxServiceKey.Route53]?: AwsxServiceConfig;
+    [AwsxServiceKey.EventBridge]?: AwsxServiceConfig;
   };
 };
 
@@ -85,6 +87,7 @@ export type AwsxNormalizedConfig = {
     [AwsxServiceKey.Sqs]: AwsxServiceConfigNormalized;
     [AwsxServiceKey.Ses]: AwsxServiceConfigNormalized;
     [AwsxServiceKey.Route53]: AwsxServiceConfigNormalized;
+    [AwsxServiceKey.EventBridge]: AwsxServiceConfigNormalized;
   };
 };
 

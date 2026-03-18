@@ -1,6 +1,6 @@
 {
   "name": "@nestp/awsx",
-  "version": "0.1.3",
+  "version": "0.1.5",
   "description": "One-stop AWS integrations for NestJS with unified config and CLI",
   "license": "MIT",
   "author": "ALIRAZA47",
@@ -49,8 +49,11 @@
     "sqs",
     "ses",
     "route53",
+    "eventbridge",
     "sdk",
-    "cloud"
+    "cloud",
+    "nest-aws",
+    "nest aws"
   ],
   "engines": {
     "node": ">=18"
@@ -59,6 +62,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@aws-sdk/client-eventbridge": "^3.552.0",
     "@aws-sdk/client-route-53": "^3.552.0",
     "@aws-sdk/client-s3": "^3.552.0",
     "@aws-sdk/client-ses": "^3.552.0",

@@ -7,6 +7,7 @@ const enums = `AwsxServiceKey:
 - Sqs
 - Ses
 - Route53
+- EventBridge
 
 AwsxCredentialSource:
 - Default
@@ -41,6 +42,7 @@ S3Service
 SqsService
 SesService
 Route53Service
+EventBridgeService
 AwsxSqsConsumerService
 AwsxHealthIndicator
 
@@ -92,6 +94,11 @@ upsertARecord
 upsertCnameRecord
 upsertAaaaRecord
 upsertTxtRecord`;
+
+const eventBridgeMethods = `putEvents
+putEvent
+putRule
+putTargets`;
 
 export function ApiReferencePage() {
   return (
@@ -153,6 +160,15 @@ export function ApiReferencePage() {
         </CardHeader>
         <CardContent>
           <CodeBlock code={route53Methods} language="txt" />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>EventBridgeService methods</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <CodeBlock code={eventBridgeMethods} language="txt" />
         </CardContent>
       </Card>
     </div>

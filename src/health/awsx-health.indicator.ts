@@ -2,7 +2,9 @@ import { Inject, Injectable } from "@nestjs/common";
 import { HeadBucketCommand } from "@aws-sdk/client-s3";
 import { GetQueueAttributesCommand } from "@aws-sdk/client-sqs";
 import { GetAccountCommand } from "@aws-sdk/client-ses";
+import { ListEventBusesCommand } from "@aws-sdk/client-eventbridge";
 import { AwsxToken } from "../constants";
+import type { EventBridgeClient } from "@aws-sdk/client-eventbridge";
 import type { S3Client } from "@aws-sdk/client-s3";
 import type { SQSClient } from "@aws-sdk/client-sqs";
 import type { SESClient } from "@aws-sdk/client-ses";
@@ -25,6 +27,8 @@ export class AwsxHealthIndicator {
     private readonly sqs: SQSClient,
     @Inject(AwsxToken.SesClient)
     private readonly ses: SESClient,
+    @Inject(AwsxToken.EventBridgeClient)
+    private readonly eventBridge: EventBridgeClient,
   ) {}
 
   async checkS3(key: string, bucket: string): Promise<AwsxHealthIndicatorResult> {
@@ -63,6 +67,20 @@ export class AwsxHealthIndicator {
   async checkSes(key: string): Promise<AwsxHealthIndicatorResult> {
     try {
       await this.ses.send(new GetAccountCommand({}));
+      return { [key]: { status: "up" } };
+    } catch (err: any) {
+      return {
+        [key]: {
+          status: "down",
+          message: err?.message ?? String(err),
+        },
+      };
+    }
+  }
+
+  async checkEventBridge(key: string): Promise<AwsxHealthIndicatorResult> {
+    try {
+      await this.eventBridge.send(new ListEventBusesCommand({ Limit: 1 }));
       return { [key]: { status: "up" } };
     } catch (err: any) {
       return {

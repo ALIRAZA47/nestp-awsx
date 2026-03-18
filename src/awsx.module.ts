@@ -1,10 +1,11 @@
 import { DynamicModule, Module, Provider } from "@nestjs/common";
 import { readFileSync } from "fs";
 import { isAbsolute, join } from "path";
-import { S3Client } from "@aws-sdk/client-s3";
-import { SQSClient } from "@aws-sdk/client-sqs";
-import { SESClient } from "@aws-sdk/client-ses";
+import { EventBridgeClient } from "@aws-sdk/client-eventbridge";
 import { Route53Client } from "@aws-sdk/client-route-53";
+import { S3Client } from "@aws-sdk/client-s3";
+import { SESClient } from "@aws-sdk/client-ses";
+import { SQSClient } from "@aws-sdk/client-sqs";
 import { AwsxToken } from "./constants";
 import { createClient } from "./clients";
 import { normalizeConfig } from "./normalize";
@@ -17,6 +18,7 @@ import {
 } from "./types";
 import { AwsxService } from "./awsx.service";
 import { AwsxSqsConsumerService } from "./consumers/awsx-sqs-consumer.service";
+import { EventBridgeService } from "./services/eventbridge.service";
 import { Route53Service } from "./services/route53.service";
 import { S3Service } from "./services/s3.service";
 import { SesService } from "./services/ses.service";
@@ -41,6 +43,7 @@ export class AwsxModule {
       sqs?: { send: (cmd: any) => Promise<any> };
       ses?: { send: (cmd: any) => Promise<any> };
       route53?: { send: (cmd: any) => Promise<any> };
+      eventbridge?: { send: (cmd: any) => Promise<any> };
     },
   ): DynamicModule {
     const normalized = normalizeConfig(
@@ -50,6 +53,7 @@ export class AwsxModule {
           [AwsxServiceKey.Sqs]: { credentials: { accessKeyId: "AKIA", secretAccessKey: "s" } },
           [AwsxServiceKey.Ses]: { credentials: { accessKeyId: "AKIA", secretAccessKey: "s" } },
           [AwsxServiceKey.Route53]: { credentials: { accessKeyId: "AKIA", secretAccessKey: "s" } },
+          [AwsxServiceKey.EventBridge]: { credentials: { accessKeyId: "AKIA", secretAccessKey: "s" } },
         },
       },
     );
@@ -58,6 +62,7 @@ export class AwsxModule {
     const sqsClient = mocks?.sqs ?? { send: noop };
     const sesClient = mocks?.ses ?? { send: noop };
     const route53Client = mocks?.route53 ?? { send: noop };
+    const eventbridgeClient = mocks?.eventbridge ?? { send: noop };
     return {
       module: AwsxModule,
       providers: [
@@ -66,6 +71,7 @@ export class AwsxModule {
         { provide: AwsxToken.SqsClient, useValue: sqsClient },
         { provide: AwsxToken.SesClient, useValue: sesClient },
         { provide: AwsxToken.Route53Client, useValue: route53Client },
+        { provide: AwsxToken.EventBridgeClient, useValue: eventbridgeClient },
         ...AwsxModule.createServiceProviders(),
       ],
       exports: AwsxModule.exportedProviders(),
@@ -176,6 +182,12 @@ export class AwsxModule {
           createClient(config.services[AwsxServiceKey.Route53], Route53Client),
         inject: [AwsxToken.Config],
       },
+      {
+        provide: AwsxToken.EventBridgeClient,
+        useFactory: (config: AwsxNormalizedConfig) =>
+          createClient(config.services[AwsxServiceKey.EventBridge], EventBridgeClient),
+        inject: [AwsxToken.Config],
+      },
     ];
   }
 
@@ -197,6 +209,10 @@ export class AwsxModule {
         provide: AwsxToken.Route53Service,
         useClass: Route53Service,
       },
+      {
+        provide: AwsxToken.EventBridgeService,
+        useClass: EventBridgeService,
+      },
       AwsxService,
       AwsxSqsConsumerService,
     ];
@@ -209,10 +225,12 @@ export class AwsxModule {
       AwsxToken.SqsClient,
       AwsxToken.SesClient,
       AwsxToken.Route53Client,
+      AwsxToken.EventBridgeClient,
       AwsxToken.S3Service,
       AwsxToken.SqsService,
       AwsxToken.SesService,
       AwsxToken.Route53Service,
+      AwsxToken.EventBridgeService,
       AwsxService,
       AwsxSqsConsumerService,
     ];
